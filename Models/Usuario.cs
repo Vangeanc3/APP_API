@@ -15,5 +15,6 @@ namespace APP_API.Models
         public string? Role { get; set; }
         public string? Endereco { get; set; }
         public string? Cpf { get; set; } 
+        public bool Status { get; set; } = true;
     }
 }
