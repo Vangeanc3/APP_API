@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221227025145_mapeando a tabela")]
-    partial class mapeandoatabela
+    [Migration("20221229043749_testeMigracao")]
+    partial class testeMigracao
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,21 +31,34 @@ namespace APPAPI.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Endereco")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("NomeDeUsuario")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Role")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Senha")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("Status")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Telefone")
+                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("Id");
