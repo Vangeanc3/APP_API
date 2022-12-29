@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace APP_API.Settings
 {
-    public class Setting
+    public static class Setting
     {
-        public string Chave = "vgsdvyyu3e8v32rvbdc827fdv3byf8vg8732"
+        public static string ChaveSecreta = "vgsdvyyu3e8v32rvbdc827fdv3byf8vg8732";
     }
 }
