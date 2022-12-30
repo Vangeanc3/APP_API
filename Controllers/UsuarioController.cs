@@ -31,7 +31,7 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("v1/usuarios/{email}/{senha}")]
+        [Route("/usuarios/{email}/{senha}")]
         public async Task<IActionResult> BuscarUsuario
         ([FromServices] AppDbContext context,
             [FromRoute] string email,
