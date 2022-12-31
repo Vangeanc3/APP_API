@@ -4,7 +4,8 @@ namespace APP_API.Models
 {
     public class Instalador : Usuario
     {
-        public Produto Produtos { get; set; }
+        public List<Orcamento> Orcamentos { get; set; }
+        public List<Cliente> Clientes { get; set; }
         
     }
 }
