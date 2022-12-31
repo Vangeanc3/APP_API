@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace APP_API.Controllers
 {
     [ApiController]
-    [Route("v1")]
+    [Route("v1/usuario")]
     public class UsuarioController : ControllerBase
     {
         public UsuarioController()
@@ -14,6 +14,7 @@ namespace APP_API.Controllers
         }
 
         [HttpPost]
+        [Route("criar")]
         public async Task<IActionResult> CriarUsuario
         ([FromServices] AppDbContext context,
         [FromBody]Usuario usuario)
@@ -31,18 +32,16 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("v1/usuarios/{email}/{senha}")]
+        [Route("{usuarioemail}")]
         public async Task<IActionResult> BuscarUsuario
         ([FromServices] AppDbContext context,
-            [FromRoute] string email,
-            [FromRoute] string senha)
+            [FromRoute] string usuarioemail)
         {
             var usuario = await context.
             Usuarios.
             AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email.ToLower() == email.ToLower() 
-                && x.Senha.ToLower() == senha.ToLower());
-
+            .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower()
+            || x.NomeDeUsuario.ToLower() == usuarioemail.ToLower());
                 return Ok(usuario);
         }
     }
