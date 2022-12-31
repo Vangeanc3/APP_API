@@ -1,17 +1,14 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
+using APP_API.Interfaces;
 using APP_API.Models;
 using APP_API.Settings;
 using Microsoft.IdentityModel.Tokens;
 
 namespace APP_API.Services
 {
-    public class TokenService
+    public class TokenService : ITokenService
     {
         public string GerarToken(Usuario Usuario)
         {

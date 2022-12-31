@@ -1,5 +1,6 @@
 using System.Text;
 using APP_API.Data;
+using APP_API.Interfaces;
 using APP_API.Services;
 using APP_API.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,12 +21,14 @@ builder.Services.AddDbContext<AppDbContext>(
         opts.UseMySql(builder.Configuration.GetConnectionString("ConnectionPadrao"),
                       new MySqlServerVersion(new Version(8, 0)));
     });
-builder.Services.AddScoped<TokenService>();
+
+builder.Services.AddScoped<ITokenService , TokenService>();
+
 var key = Encoding.ASCII.GetBytes(Setting.ChaveSecreta);
 builder.Services.AddAuthentication(x => {
     x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(x => {
+    }).AddJwtBearer(x => {
     x.RequireHttpsMetadata = false;
     x.SaveToken = true;
     x.TokenValidationParameters = new TokenValidationParameters
@@ -35,7 +38,7 @@ builder.Services.AddAuthentication(x => {
         ValidateIssuer = false,
         ValidateAudience = false
     };
-});
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

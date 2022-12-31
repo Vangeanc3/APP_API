@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace APP_API.Models
 {
-    public class Administrador
+    public class Pedido
     {
-        
+
     }
 }
