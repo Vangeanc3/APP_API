@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221229043749_testeMigracao")]
-    partial class testeMigracao
+    [Migration("20230109210027_migrationTeste")]
+    partial class migrationTeste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,26 +23,20 @@ namespace APPAPI.Migrations
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<string>("Email")
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Cpf")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Endereco")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
 
-                    b.Property<string>("NomeDeUsuario")
+                    b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -61,7 +55,7 @@ namespace APPAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Id");
+                    b.HasKey("Email");
 
                     b.ToTable("Usuarios");
                 });

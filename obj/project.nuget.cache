@@ -1,11 +1,9 @@
 {
   "version": 2,
-  "dgSpecHash": "nFSx1My7lendZQRw0rTO+x5OKTomuSAo9iUnSUYprQeNtqSyCXq6yPRB0RBxxUnAGXLNZo2+quss08fDDaz3gA==",
+  "dgSpecHash": "zZ3p1V9RMp/WOCUZVY51o18WsPdHP4SZzQaqpT4f/R+QQFzEfwaHCpzGI+o9/nEOqih2iqzQejkgOU7qIyAPgg==",
   "success": true,
   "projectFilePath": "C:\\Users\\est_imartins\\Desktop\\APP_API\\APP_API.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\est_imartins\\.nuget\\packages\\automapper\\12.0.0\\automapper.12.0.0.nupkg.sha512",
-    "C:\\Users\\est_imartins\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.0\\automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\castle.core\\5.1.0\\castle.core.5.1.0.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.aspnetcore.authentication\\2.2.0\\microsoft.aspnetcore.authentication.2.2.0.nupkg.sha512",
@@ -24,7 +22,7 @@
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.aspnetcore.http.features\\2.2.0\\microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.aspnetcore.metadata\\7.0.1\\microsoft.aspnetcore.metadata.7.0.1.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.aspnetcore.webutilities\\2.2.0\\microsoft.aspnetcore.webutilities.2.2.0.nupkg.sha512",
-    "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
+    "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.entityframeworkcore\\7.0.1\\microsoft.entityframeworkcore.7.0.1.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.entityframeworkcore.abstractions\\7.0.1\\microsoft.entityframeworkcore.abstractions.7.0.1.nupkg.sha512",
     "C:\\Users\\est_imartins\\.nuget\\packages\\microsoft.entityframeworkcore.analyzers\\7.0.1\\microsoft.entityframeworkcore.analyzers.7.0.1.nupkg.sha512",

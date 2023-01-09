@@ -7,6 +7,6 @@ namespace APP_API.Models
 {
     public class Vendedor : Usuario
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
     }
 }

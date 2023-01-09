@@ -18,9 +18,7 @@ namespace APP_API.Services
             {
                 Subject= new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, Usuario.NomeDeUsuario),
                     new Claim(ClaimTypes.Email, Usuario.Email),
-                    new Claim(ClaimTypes.Role, Usuario.Role)
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(1),
