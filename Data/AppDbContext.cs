@@ -10,7 +10,6 @@ namespace APP_API.Data
         {
         }
 
-        public DbSet<Usuario> Usuarios { get; set; } = default!;
-
+        public DbSet<Usuario> Usuarios { get; set; } = default!;        
     }
 }
