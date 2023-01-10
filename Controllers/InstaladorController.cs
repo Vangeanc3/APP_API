@@ -17,6 +17,7 @@ namespace APP_API.Controllers
         {
             Usuario user = usuario;
 
+
             if (user is null)
             {
                 return BadRequest();

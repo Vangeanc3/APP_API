@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using APP_API.Models;
 using APP_API.Data;
 using Microsoft.EntityFrameworkCore;
+using APP_API.Settings;
 
 namespace APP_API.Controllers
 {

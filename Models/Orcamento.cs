@@ -19,3 +19,4 @@ namespace APP_API.Models
         public double PrecoFinal { get; set; }
     }
 }
+
