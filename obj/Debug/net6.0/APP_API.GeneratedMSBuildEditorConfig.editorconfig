@@ -5,21 +5,12 @@ build_property.UsingMicrosoftNETSdkWeb = true
 build_property.ProjectTypeGuids = 
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
-build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = APP_API
 build_property.RootNamespace = APP_API
-<<<<<<< HEAD
 build_property.ProjectDir = C:\Users\ismae\OneDrive\Área de Trabalho\APP_API\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
 build_property.MSBuildProjectDirectory = C:\Users\ismae\OneDrive\Área de Trabalho\APP_API
-=======
-build_property.ProjectDir = C:\Users\est_imartins\Desktop\APP_API\
-build_property.RazorLangVersion = 6.0
-build_property.SupportLocalizedComponentNames = 
-build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\est_imartins\Desktop\APP_API
->>>>>>> f3f81905dc28b1c6870e6a73ec7bcb6426665ed8
 build_property._RazorSourceGeneratorDebug = 
