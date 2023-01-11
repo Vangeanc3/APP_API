@@ -11,7 +11,6 @@ namespace APP_API.Models
         public int Numero { get; set; }
         public string Bloco { get; set; }
         public string Apartamento { get; set; }
-        [JsonIgnore]
         public virtual Usuario Usuario { get; set; }
     }
 }

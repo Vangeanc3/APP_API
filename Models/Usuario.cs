@@ -16,10 +16,10 @@ namespace APP_API.Models
         public string Email { get; set; } // PK
         public string Senha { get; set; }
         public Role Role { get; set; } // Profissao
-        public Endereco Endereco { get; set; } // Endereço
-        public int EnderecoId { get; set; } // Endereço FK
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;
+        public Guid EnderecoId { get; set; } // Endereço FK
+        public Endereco Endereco { get; set; } // Endereço
         [JsonIgnore]
         public virtual List<Orcamento> Orcamentos { get; set; } // O Usuario pode criar um orcamento
         [JsonIgnore]
@@ -33,6 +33,5 @@ namespace APP_API.Models
         Vendedor,
         Instalador,
         Administrador
-
     }
 }

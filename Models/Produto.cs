@@ -13,8 +13,9 @@ namespace APP_API.Models
         public string LinkImg { get; set; }
         public string LinkPdfManual { get; set; }
         public Categoria Categoria { get; set; } // Preciso de detalhes
-        [JsonIgnore]
-        public virtual Orcamento? Orcamento { get; set; }
+        public ICollection<Orcamento>? Orcamentos { get; set; }
+        public ICollection<Pedido>? Pedidos { get; set; }
+
     }
 
     public enum Categoria
