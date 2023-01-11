@@ -16,6 +16,7 @@ namespace APP_API.Models
         public Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
         public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
         public List<Produto> Produtos { get; set; } // Produtos do orcamento
+        public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
     }
 }
