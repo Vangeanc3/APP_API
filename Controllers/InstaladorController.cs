@@ -29,6 +29,28 @@ namespace APP_API.Controllers
             return Ok(user);
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpGet]
         [Route("anonima")]
         [AllowAnonymous]

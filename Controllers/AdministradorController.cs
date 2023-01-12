@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace APP_API.Controllers
 {
     [ApiController]
-    [Route("admin")]
+    [Route("admin")] // o Admin tem acesso a todas as rotas e funcionalidades
     public class AdministradorController : ControllerBase
     {
         [HttpPost]

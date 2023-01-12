@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace APP_API.Models
@@ -15,6 +16,7 @@ namespace APP_API.Models
         public string DescricaoServico { get; set; }
         public Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
         public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
+        [JsonIgnore]
         public ICollection<Produto> Produtos { get; set; } // Produtos do orcamento
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
