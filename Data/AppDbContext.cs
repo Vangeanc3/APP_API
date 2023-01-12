@@ -41,7 +41,6 @@ namespace APP_API.Data
         }
 
         public DbSet<Usuario> Usuarios { get; set; } = default!;
-
         public DbSet<Endereco> Enderecos { get; set; } = default!;
         public DbSet<Orcamento> Orcamentos { get; set; } = default!;
         public DbSet<Pedido> Pedidos { get; set; } = default!;
