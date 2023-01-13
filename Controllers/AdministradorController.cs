@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using APP_API.Data;
+using APP_API.Data.Dtos.UsuarioDto;
 using APP_API.Models;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APP_API.Controllers
@@ -16,9 +20,10 @@ namespace APP_API.Controllers
         [Route("criar")]
         public async Task<IActionResult> CriarAdmin
         ([FromServices] AppDbContext context,
-        [FromBody]Usuario usuario)
+         [FromServices] IMapper mapper,
+         [FromBody]CreateUsuarioDto usuarioDto) // Usando o mapeando do AutoMapper
         {
-            Usuario user = usuario;
+            Usuario user = mapper.Map<Usuario>(usuarioDto);
 
             if (user is null)
             {
@@ -28,6 +33,19 @@ namespace APP_API.Controllers
             await context.Usuarios.AddAsync(user);
             await context.SaveChangesAsync();
             return Ok(user);
+        }
+
+        [HttpGet]
+        [Route("teste")]
+        [Authorize(Roles = "Administrador")]
+        public string Administrador() => $"Administrador";
+
+        [HttpGet]
+        [Route("teste2")]
+        public IActionResult teste([FromBody] Usuario usuario)
+        {
+            var role = usuario.Role;
+            return Ok(role.ToString());
         }
     }
 }

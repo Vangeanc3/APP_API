@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data;
 using APP_API.Models;
+using AutoMapper;
+using APP_API.Data.Dtos.UsuarioDto;
 
 namespace APP_API.Controllers
 {
@@ -13,20 +15,21 @@ namespace APP_API.Controllers
         [Route("criar")]
         public async Task<IActionResult> CriarInstalador
         ([FromServices] AppDbContext context,
-        [FromBody]Usuario usuario)
+         [FromServices] IMapper mapper,
+        [FromBody]CreateUsuarioDto usuarioDto)
         {
-            Usuario user = usuario;
+            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
 
 
-            if (user is null)
+            if (usuario is null)
             {
                 return BadRequest();
             }
 
-            user.Role = Role.Instalador;
-            await context.Usuarios.AddAsync(user);
+            usuario.Role = Role.Instalador;
+            await context.Usuarios.AddAsync(usuario);
             await context.SaveChangesAsync();
-            return Ok(user);
+            return Ok(usuario);
         }
 
 
@@ -59,7 +62,7 @@ namespace APP_API.Controllers
         [HttpGet]
         [Route("autenticado")]
         [Authorize]
-        public string Autenticado() => $"Autenticado - {User.Identity.Name}";
+        public string Autenticado() => $"Autenticado - { User.Identity.Name }";
 
         [HttpGet]
         [Route("instalador")]
@@ -69,6 +72,6 @@ namespace APP_API.Controllers
         [HttpGet]
         [Route("vendedor")]
         [Authorize(Roles = "Vendedor")]
-        public string Vendedor() => $"Vendedor";
+        public string Vendedor() => $"Vendedor";    
     }
 }
