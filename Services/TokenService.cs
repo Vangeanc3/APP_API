@@ -16,9 +16,11 @@ namespace APP_API.Services
             var key = Encoding.ASCII.GetBytes(Setting.ChaveSecreta);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject= new ClaimsIdentity(new[]
+                Subject = new ClaimsIdentity(new[]
                 {
+                    new Claim(ClaimTypes.Name, Usuario.Nome),
                     new Claim(ClaimTypes.Email, Usuario.Email),
+                    new Claim(ClaimTypes.Role, Usuario.Role.ToString())
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(1),

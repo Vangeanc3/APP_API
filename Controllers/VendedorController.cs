@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using APP_API.Data;
+using APP_API.Data.Dtos.UsuarioDto;
 using APP_API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APP_API.Controllers
@@ -16,19 +18,20 @@ namespace APP_API.Controllers
         [Route("criar")]
         public async Task<IActionResult> CriarVendedor
         ([FromServices] AppDbContext context,
-        [FromBody]Usuario usuario)
+         [FromServices] IMapper mapper,
+         [FromBody] CreateUsuarioDto usuarioDto)
         {
-            Usuario user = usuario;
+            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
 
-            if (user is null)
+            if (usuario is null)
             {
                 return BadRequest();
             }
 
-            user.Role = Role.Vendedor;
-            await context.Usuarios.AddAsync(user);
+            usuario.Role = Role.Vendedor;
+            await context.Usuarios.AddAsync(usuario);
             await context.SaveChangesAsync();
-            return Ok(user);
+            return Ok(usuario);
         }
 
     }

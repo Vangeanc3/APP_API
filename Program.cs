@@ -23,6 +23,7 @@ builder.Services.AddDbContext<AppDbContext>(
     });
 
 builder.Services.AddScoped<ITokenService , TokenService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var key = Encoding.ASCII.GetBytes(Setting.ChaveSecreta);
 builder.Services.AddAuthentication(x => {
