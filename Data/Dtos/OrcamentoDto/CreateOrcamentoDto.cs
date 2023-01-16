@@ -1,25 +1,18 @@
-using System;
-using System.Collections.Generic;
+﻿using APP_API.Models;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace APP_API.Models
+namespace APP_API.Data.Dtos.OrcamentoDto
 {
-    public class Orcamento  // Depende de produtos
+    public class CreateOrcamentoDto
     {
         [Key]
         [Required]
         public string Identificador { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
         public string DescricaoServico { get; set; }
-        [JsonIgnore]
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
         public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
-        public virtual Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
-        public virtual ICollection<Produto> Produtos { get; set; } // Produtos do orcamento
     }
 }
-

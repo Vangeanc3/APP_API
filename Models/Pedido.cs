@@ -16,7 +16,7 @@ namespace APP_API.Models
         public string EntregaOpcao { get; set; } // Definir depois!!!
         public FormaDePagamento FormaDePagamento { get; set; } // Select
         public double Preco { get; set; }
-        public ICollection<Produto>? Produtos { get; set; } // Lista de produtos
+        public virtual ICollection<Produto>? Produtos { get; set; } // Lista de produtos
 
     }
 

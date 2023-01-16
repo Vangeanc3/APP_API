@@ -16,9 +16,9 @@ namespace APP_API.Models
         public int LinhaId { get; set; } // FK Linnha
         public virtual Linha Linha { get; set; } // LINHA
         [JsonIgnore]
-        public ICollection<Orcamento>? Orcamentos { get; set; }
+        public virtual ICollection<Orcamento>? Orcamentos { get; set; }
         [JsonIgnore]
-        public ICollection<Pedido>? Pedidos { get; set; }
+        public virtual ICollection<Pedido>? Pedidos { get; set; }
 
     }
 }

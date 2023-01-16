@@ -4,6 +4,8 @@ using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace APP_API.Controllers
 {
@@ -29,6 +31,12 @@ namespace APP_API.Controllers
             await context.Categorias.AddAsync(categoria);
             await context.SaveChangesAsync();
             return Ok(categoria);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarCategorias([FromServices] AppDbContext context)
+        {
+            return Ok(await context.Categorias.ToListAsync());
         }
     }
 }
