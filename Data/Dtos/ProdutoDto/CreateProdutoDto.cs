@@ -1,12 +1,10 @@
-using System.ComponentModel.DataAnnotations;
+﻿using APP_API.Models;
 using System.Text.Json.Serialization;
 
-namespace APP_API.Models
+namespace APP_API.Data.Dtos.ProdutoDto
 {
-    public class Produto
+    public class CreateProdutoDto
     {
-        [Key]
-        public int Id { get; set; }
         public string Nome { get; set; }
         public string Descricao { get; set; }
         public double PrecoParceiro { get; set; } // Preciso de detalhes
@@ -14,11 +12,5 @@ namespace APP_API.Models
         public string LinkImg { get; set; }
         public string LinkPdfManual { get; set; }
         public int LinhaId { get; set; } // FK Linnha
-        public virtual Linha Linha { get; set; } // LINHA
-        [JsonIgnore]
-        public ICollection<Orcamento>? Orcamentos { get; set; }
-        [JsonIgnore]
-        public ICollection<Pedido>? Pedidos { get; set; }
-
     }
 }

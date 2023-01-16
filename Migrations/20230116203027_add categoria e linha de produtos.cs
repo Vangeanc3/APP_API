@@ -7,12 +7,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APPAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class migracaodeusuario : Migration
+    public partial class addcategoriaelinhadeprodutos : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Categorias",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categorias", x => x.Id);
+                })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
@@ -39,26 +54,24 @@ namespace APPAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "Produtos",
+                name: "Linhas",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Descricao = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    PrecoParceiro = table.Column<double>(type: "double", nullable: false),
-                    PrecoCliente = table.Column<double>(type: "double", nullable: false),
-                    LinkImg = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LinkPdfManual = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Categoria = table.Column<int>(type: "int", nullable: false)
+                    CategoriaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.PrimaryKey("PK_Linhas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Linhas_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -87,6 +100,36 @@ namespace APPAPI.Migrations
                         name: "FK_Usuarios_Enderecos_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Enderecos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Produtos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Nome = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Descricao = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    PrecoParceiro = table.Column<double>(type: "double", nullable: false),
+                    PrecoCliente = table.Column<double>(type: "double", nullable: false),
+                    LinkImg = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LinkPdfManual = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    LinhaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Produtos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Produtos_Linhas_LinhaId",
+                        column: x => x.LinhaId,
+                        principalTable: "Linhas",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
@@ -197,6 +240,11 @@ namespace APPAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Linhas_CategoriaId",
+                table: "Linhas",
+                column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrcamentoProdutos_ProdutosId",
                 table: "OrcamentoProdutos",
                 column: "ProdutosId");
@@ -215,6 +263,11 @@ namespace APPAPI.Migrations
                 name: "IX_Pedidos_InstaladorEmail",
                 table: "Pedidos",
                 column: "InstaladorEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produtos_LinhaId",
+                table: "Produtos",
+                column: "LinhaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuarios_EnderecoId",
@@ -245,7 +298,13 @@ namespace APPAPI.Migrations
                 name: "Usuarios");
 
             migrationBuilder.DropTable(
+                name: "Linhas");
+
+            migrationBuilder.DropTable(
                 name: "Enderecos");
+
+            migrationBuilder.DropTable(
+                name: "Categorias");
         }
     }
 }

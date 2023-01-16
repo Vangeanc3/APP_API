@@ -1,5 +1,8 @@
 ﻿using APP_API.Data;
+using APP_API.Data.Dtos.CategoriaDto;
+using APP_API.Data.Dtos.ProdutoDto;
 using APP_API.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
@@ -11,21 +14,22 @@ namespace APP_API.Controllers
     [ApiController]
     public class ProdutoController : ControllerBase
     {
-        [HttpPost] // Definir quem vai criar o produto
+        [HttpPost]
         [Route("criar")]
-        [Authorize(Roles = "Vendedor")]
         public async Task<IActionResult> CriarProduto
-            ([FromServices] AppDbContext context,
-             [FromBody] Produto produto)
+           ([FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
+            [FromBody] CreateProdutoDto produtoDto)
         {
-            var p = produto;
+            Produto produto = mapper.Map<Produto>(produtoDto);
 
-            if (p is null)
+
+            if (produto is null)
             {
                 return BadRequest();
-            } 
+            }
 
-            await context.Produtos.AddAsync(p);
+            await context.Produtos.AddAsync(produto);
             await context.SaveChangesAsync();
             return Ok(produto);
         }

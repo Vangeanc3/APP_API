@@ -19,6 +19,21 @@ namespace APPAPI.Migrations
                 .HasAnnotation("ProductVersion", "7.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("APP_API.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorias");
+                });
+
             modelBuilder.Entity("APP_API.Models.Endereco", b =>
                 {
                     b.Property<Guid>("Id")
@@ -51,6 +66,26 @@ namespace APPAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Enderecos");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("Linhas");
                 });
 
             modelBuilder.Entity("APP_API.Models.Orcamento", b =>
@@ -115,12 +150,12 @@ namespace APPAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Categoria")
-                        .HasColumnType("int");
-
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int>("LinhaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LinkImg")
                         .IsRequired()
@@ -141,6 +176,8 @@ namespace APPAPI.Migrations
                         .HasColumnType("double");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("LinhaId");
 
                     b.ToTable("Produtos");
                 });
@@ -214,6 +251,17 @@ namespace APPAPI.Migrations
                     b.ToTable("PedidoProdutos", (string)null);
                 });
 
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.HasOne("APP_API.Models.Categoria", "Categoria")
+                        .WithMany("Linhas")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+                });
+
             modelBuilder.Entity("APP_API.Models.Orcamento", b =>
                 {
                     b.HasOne("APP_API.Models.Usuario", "Instalador")
@@ -234,6 +282,17 @@ namespace APPAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Instalador");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Produto", b =>
+                {
+                    b.HasOne("APP_API.Models.Linha", "Linha")
+                        .WithMany("Produtos")
+                        .HasForeignKey("LinhaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Linha");
                 });
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>
@@ -277,10 +336,19 @@ namespace APPAPI.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("APP_API.Models.Categoria", b =>
+                {
+                    b.Navigation("Linhas");
+                });
+
             modelBuilder.Entity("APP_API.Models.Endereco", b =>
                 {
-                    b.Navigation("Usuario")
-                        .IsRequired();
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>

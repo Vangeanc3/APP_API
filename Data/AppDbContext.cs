@@ -29,6 +29,16 @@ namespace APP_API.Data
             .WithMany(instalador => instalador.Pedidos)
             .HasForeignKey(pedido => pedido.InstaladorEmail);
 
+            builder.Entity<Linha>() // Relação entre linha e categoria
+                .HasOne(linha => linha.Categoria)
+                .WithMany(categoria => categoria.Linhas)
+                .HasForeignKey(linha => linha.CategoriaId);
+
+            builder.Entity<Produto>() // Relação entre linha e produto - Produto tem uma linha
+                .HasOne(produto => produto.Linha)
+                .WithMany(linha => linha.Produtos)
+                .HasForeignKey(produto => produto.LinhaId);
+
             builder.Entity<Produto>() // Relacao N para N => Produto está em vários orcamentos e vice versa
                 .HasMany(produto => produto.Orcamentos)
                 .WithMany(orcamentos => orcamentos.Produtos)
@@ -38,12 +48,15 @@ namespace APP_API.Data
                 .HasMany(produto => produto.Pedidos)
                 .WithMany(pedidos => pedidos.Produtos)
                 .UsingEntity(juncao => juncao.ToTable("PedidoProdutos")); // No final vai virar essa tabela
+
         }
 
         public DbSet<Usuario> Usuarios { get; set; } = default!;
         public DbSet<Endereco> Enderecos { get; set; } = default!;
         public DbSet<Orcamento> Orcamentos { get; set; } = default!;
         public DbSet<Pedido> Pedidos { get; set; } = default!;
+        public DbSet<Categoria> Categorias { get; set; } = default!;
+        public DbSet<Linha> Linhas { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
 
     }

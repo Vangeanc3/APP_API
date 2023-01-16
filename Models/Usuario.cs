@@ -25,7 +25,6 @@ namespace APP_API.Models
         public virtual List<Orcamento>? Orcamentos { get; set; } // O Usuario pode criar um orcamento
         [JsonIgnore]
         public virtual List<Pedido>? Pedidos { get; set; } // O Usuario Instalador pode fazer um pedido
-
     }
 
     public enum Role
