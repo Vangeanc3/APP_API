@@ -31,12 +31,15 @@ namespace APP_API.Controllers
             await context.Categorias.AddAsync(categoria);
             await context.SaveChangesAsync();
             return Ok(categoria);
-        }
+        } 
 
         [HttpGet]
-        public async Task<IActionResult> BuscarCategorias([FromServices] AppDbContext context)
+        public async Task<IActionResult> BuscarCategorias([FromServices] AppDbContext context, [FromServices] IMapper mapper)
         {
-            return Ok(await context.Categorias.ToListAsync());
+            List<Categoria> categorias = await context.Categorias.ToListAsync();
+            List<ReadCategoriaDto> categoriaDto = mapper.Map<List<ReadCategoriaDto>>(categorias);
+
+            return Ok(categoriaDto);
         }
     }
 }

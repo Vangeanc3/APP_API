@@ -9,6 +9,7 @@ namespace APP_API.Profiles
         public LinhaProfile()
         {
             CreateMap<CreateLinhaDto, Linha>();
+            CreateMap<Linha, ReadLinhaDto>();
         }
     }
 }

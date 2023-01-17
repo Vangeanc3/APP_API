@@ -1,23 +1,22 @@
-﻿using APP_API.Data.Dtos.CategoriaDto;
+﻿using APP_API.Data.Dtos.LinhaDto;
 using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using APP_API.Data.Dtos.LinhaDto;
 
 namespace APP_API.Controllers
 {
-    [Route("linha")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ControllerLinha : ControllerBase
+    public class LinhaController : ControllerBase
     {
         [HttpPost]
         [Route("criar")]
         public async Task<IActionResult> CriarLinha
-           ([FromServices] AppDbContext context,
-            [FromServices] IMapper mapper,
-            [FromBody] CreateLinhaDto linhaDto)
+         ([FromServices] AppDbContext context,
+          [FromServices] IMapper mapper,
+          [FromBody] CreateLinhaDto linhaDto)
         {
             Linha linha = mapper.Map<Linha>(linhaDto);
 

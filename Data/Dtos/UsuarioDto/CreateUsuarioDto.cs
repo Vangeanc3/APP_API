@@ -14,6 +14,6 @@ namespace APP_API.Data.Dtos.UsuarioDto
         [Required]
         public string Senha { get; set; }
         public string? Cpf { get; set; }  // Pode ser null
-        public Guid EnderecoId { get; set; } // Endereço FK
+        public Guid? EnderecoId { get; set; } // Endereço FK
     }
 }

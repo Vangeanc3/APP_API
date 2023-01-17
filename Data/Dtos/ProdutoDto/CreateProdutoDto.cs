@@ -11,6 +11,7 @@ namespace APP_API.Data.Dtos.ProdutoDto
         public double PrecoCliente { get; set; } // Preciso de detalhes
         public string LinkImg { get; set; }
         public string LinkPdfManual { get; set; }
-        public int LinhaId { get; set; } // FK Linnha
+        public int CategoriaId { get; set; }
+        public int? LinhaId { get; set; } // FK Linha
     }
 }

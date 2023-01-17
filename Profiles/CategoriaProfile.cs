@@ -9,6 +9,8 @@ namespace APP_API.Profiles
         public CategoriaProfile()
         {
             CreateMap<CreateCategoriaDto, Categoria>();
+            CreateMap<Categoria, ReadCategoriaDto>();
+            //CreateMap<List<Categoria>, List<ReadCategoriaDto>>();
         }
     }
 }

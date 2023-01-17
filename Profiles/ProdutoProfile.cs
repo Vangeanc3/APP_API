@@ -1,6 +1,14 @@
-﻿namespace APP_API.Profiles
+﻿using APP_API.Data.Dtos.ProdutoDto;
+using APP_API.Models;
+using AutoMapper;
+
+namespace APP_API.Profiles
 {
-    public class ProdutoProfile
+    public class ProdutoProfile : Profile
     {
+        public ProdutoProfile()
+        {
+            CreateMap<CreateProdutoDto, Produto>();
+        }
     }
 }

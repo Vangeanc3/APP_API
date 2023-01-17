@@ -1,19 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using APP_API.Models;
 using System.Text.Json.Serialization;
 
-namespace APP_API.Models
+namespace APP_API.Data.Dtos.LinhaDto
 {
-    public class Linha
+    public class ReadLinhaDto
     {
-        [Key]
         public int Id { get; set; }
         public string Nome { get; set; }
+        [JsonIgnore]
         public int CategoriaId { get; set; }
         [JsonIgnore]
         public virtual Categoria Categoria { get; set; }
-        [JsonIgnore]
         public virtual List<Produto> Produtos { get; set; }
-
     }
 }

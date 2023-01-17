@@ -17,7 +17,7 @@ namespace APP_API.Models
         [JsonIgnore]
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
-        public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
+        public int InstaladorId { get; set; } // FK do Instalador 1 - N
         public virtual Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
         public virtual ICollection<Produto> Produtos { get; set; } // Produtos do orcamento
     }

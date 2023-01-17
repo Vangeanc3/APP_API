@@ -22,17 +22,22 @@ namespace APP_API.Data
             builder.Entity<Orcamento>() // Usuario tem uma lista de Orçamentos
             .HasOne(orcamento => orcamento.Instalador) // Instalador é o usuario
             .WithMany(instalador => instalador.Orcamentos)
-            .HasForeignKey(orcamento => orcamento.InstaladorEmail);
+            .HasForeignKey(orcamento => orcamento.InstaladorId);
             
             builder.Entity<Pedido>() // Usuario tem uma lista de pedidos
             .HasOne(pedido => pedido.Instalador) // Instalador é o usuario
             .WithMany(instalador => instalador.Pedidos)
-            .HasForeignKey(pedido => pedido.InstaladorEmail);
+            .HasForeignKey(pedido => pedido.InstaladorId);
 
-            builder.Entity<Linha>() // Relação entre linha e categoria
+            builder.Entity<Linha>() // Relação entre linha? e categoria
                 .HasOne(linha => linha.Categoria)
                 .WithMany(categoria => categoria.Linhas)
                 .HasForeignKey(linha => linha.CategoriaId);
+
+            builder.Entity<Produto>() // Produto tem obrigatoriamente uma categoria
+                .HasOne(produto => produto.Categoria)
+                .WithMany(categoria => categoria.Produtos)
+                .HasForeignKey(produto => produto.CategoriaId);
 
             builder.Entity<Produto>() // Relação entre linha e produto - Produto tem uma linha
                 .HasOne(produto => produto.Linha)

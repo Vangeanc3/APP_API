@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APPAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class addcategoriaelinhadeprodutos : Migration
+    public partial class teste : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +33,8 @@ namespace APPAPI.Migrations
                 name: "Enderecos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Cep = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Rua = table.Column<string>(type: "longtext", nullable: false)
@@ -79,23 +79,24 @@ namespace APPAPI.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    Email = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Telefone = table.Column<int>(type: "int", nullable: false),
+                    Email = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Senha = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Role = table.Column<int>(type: "int", nullable: false),
                     Cpf = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    EnderecoId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    EnderecoId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.Email);
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Usuarios_Enderecos_EnderecoId",
                         column: x => x.EnderecoId,
@@ -121,17 +122,23 @@ namespace APPAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LinkPdfManual = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LinhaId = table.Column<int>(type: "int", nullable: false)
+                    LinhaId = table.Column<int>(type: "int", nullable: true),
+                    CategoriaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Produtos", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Produtos_Categorias_CategoriaId",
+                        column: x => x.CategoriaId,
+                        principalTable: "Categorias",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Produtos_Linhas_LinhaId",
                         column: x => x.LinhaId,
                         principalTable: "Linhas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -145,19 +152,18 @@ namespace APPAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     DescricaoServico = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstaladorEmail = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     PrecoServico = table.Column<double>(type: "double", nullable: false),
-                    PrecoFinal = table.Column<double>(type: "double", nullable: false)
+                    PrecoFinal = table.Column<double>(type: "double", nullable: false),
+                    InstaladorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orcamentos", x => x.Identificador);
                     table.ForeignKey(
-                        name: "FK_Orcamentos_Usuarios_InstaladorEmail",
-                        column: x => x.InstaladorEmail,
+                        name: "FK_Orcamentos_Usuarios_InstaladorId",
+                        column: x => x.InstaladorId,
                         principalTable: "Usuarios",
-                        principalColumn: "Email",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -168,21 +174,20 @@ namespace APPAPI.Migrations
                 {
                     Identificador = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    InstaladorEmail = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
                     EntregaOpcao = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     FormaDePagamento = table.Column<int>(type: "int", nullable: false),
-                    Preco = table.Column<double>(type: "double", nullable: false)
+                    Preco = table.Column<double>(type: "double", nullable: false),
+                    InstaladorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pedidos", x => x.Identificador);
                     table.ForeignKey(
-                        name: "FK_Pedidos_Usuarios_InstaladorEmail",
-                        column: x => x.InstaladorEmail,
+                        name: "FK_Pedidos_Usuarios_InstaladorId",
+                        column: x => x.InstaladorId,
                         principalTable: "Usuarios",
-                        principalColumn: "Email",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -250,9 +255,9 @@ namespace APPAPI.Migrations
                 column: "ProdutosId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orcamentos_InstaladorEmail",
+                name: "IX_Orcamentos_InstaladorId",
                 table: "Orcamentos",
-                column: "InstaladorEmail");
+                column: "InstaladorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PedidoProdutos_ProdutosId",
@@ -260,9 +265,14 @@ namespace APPAPI.Migrations
                 column: "ProdutosId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pedidos_InstaladorEmail",
+                name: "IX_Pedidos_InstaladorId",
                 table: "Pedidos",
-                column: "InstaladorEmail");
+                column: "InstaladorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produtos_CategoriaId",
+                table: "Produtos",
+                column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Produtos_LinhaId",

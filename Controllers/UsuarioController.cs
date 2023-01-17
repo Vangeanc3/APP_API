@@ -15,8 +15,7 @@ namespace APP_API.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpGet]
-        //[Route()]
-        [Authorize(Roles = "Usuario.Role.3")]
+        [Route("{skip}/{take}")]
         public async Task<ActionResult> RetornarUsuarios
             ([FromServices] AppDbContext context,
             [FromRoute] int skip = 0,
@@ -74,7 +73,8 @@ namespace APP_API.Controllers
 
             return new
             {
-                user,
+                user.Nome,
+                user.Role,
                 token
             };
         }

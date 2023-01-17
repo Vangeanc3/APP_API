@@ -16,6 +16,7 @@ namespace APP_API.Controllers
     {
         [HttpPost]
         [Route("criar")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> CriarProduto
            ([FromServices] AppDbContext context,
             [FromServices] IMapper mapper,

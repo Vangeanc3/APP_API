@@ -4,7 +4,7 @@ namespace APP_API.Models
 {
     public class Endereco
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Cep { get; set; }
         public string Rua { get; set; }
         public string Bairro { get; set; }
