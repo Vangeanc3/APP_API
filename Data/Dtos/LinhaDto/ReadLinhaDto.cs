@@ -7,10 +7,6 @@ namespace APP_API.Data.Dtos.LinhaDto
     {
         public int Id { get; set; }
         public string Nome { get; set; }
-        [JsonIgnore]
-        public int CategoriaId { get; set; }
-        [JsonIgnore]
-        public virtual Categoria Categoria { get; set; }
         public virtual List<Produto> Produtos { get; set; }
     }
 }

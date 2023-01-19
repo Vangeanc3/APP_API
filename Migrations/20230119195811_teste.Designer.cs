@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230117211112_teste")]
+    [Migration("20230119195811_teste")]
     partial class teste
     {
         /// <inheritdoc />
@@ -69,7 +69,12 @@ namespace APPAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Enderecos");
                 });
@@ -202,10 +207,7 @@ namespace APPAPI.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int>("EnderecoId")
-                        .HasColumnType("int");
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -221,12 +223,13 @@ namespace APPAPI.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("Telefone")
-                        .HasColumnType("int");
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Email")
                         .IsUnique();
 
                     b.ToTable("Usuarios");
@@ -260,6 +263,17 @@ namespace APPAPI.Migrations
                     b.HasIndex("ProdutosId");
 
                     b.ToTable("PedidoProdutos", (string)null);
+                });
+
+            modelBuilder.Entity("APP_API.Models.Endereco", b =>
+                {
+                    b.HasOne("APP_API.Models.Usuario", "Usuario")
+                        .WithMany("Enderecos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("APP_API.Models.Linha", b =>
@@ -312,17 +326,6 @@ namespace APPAPI.Migrations
                     b.Navigation("Linha");
                 });
 
-            modelBuilder.Entity("APP_API.Models.Usuario", b =>
-                {
-                    b.HasOne("APP_API.Models.Endereco", "Endereco")
-                        .WithOne("Usuario")
-                        .HasForeignKey("APP_API.Models.Usuario", "EnderecoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Endereco");
-                });
-
             modelBuilder.Entity("OrcamentoProduto", b =>
                 {
                     b.HasOne("APP_API.Models.Orcamento", null)
@@ -360,11 +363,6 @@ namespace APPAPI.Migrations
                     b.Navigation("Produtos");
                 });
 
-            modelBuilder.Entity("APP_API.Models.Endereco", b =>
-                {
-                    b.Navigation("Usuario");
-                });
-
             modelBuilder.Entity("APP_API.Models.Linha", b =>
                 {
                     b.Navigation("Produtos");
@@ -372,6 +370,8 @@ namespace APPAPI.Migrations
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>
                 {
+                    b.Navigation("Enderecos");
+
                     b.Navigation("Orcamentos");
 
                     b.Navigation("Pedidos");

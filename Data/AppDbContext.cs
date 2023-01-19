@@ -13,11 +13,14 @@ namespace APP_API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
+            builder.Entity<Usuario>() // Definindo um atributo unico
+                .HasIndex(usuario => usuario.Email).IsUnique();
+
             // Fazendo relações entre tabelas
             builder.Entity<Endereco>() // Usuario tem um Endereço
-            .HasOne(endereco => endereco.Usuario)
-            .WithOne(usuario => usuario.Endereco)
-            .HasForeignKey<Usuario>(usuario => usuario.EnderecoId);
+                .HasOne(endereco => endereco.Usuario)
+                .WithMany(usuario => usuario.Enderecos)
+                .HasForeignKey(endereco => endereco.UsuarioId);
 
             builder.Entity<Orcamento>() // Usuario tem uma lista de Orçamentos
             .HasOne(orcamento => orcamento.Instalador) // Instalador é o usuario

@@ -9,6 +9,7 @@ namespace APP_API.Profiles
         public ProdutoProfile()
         {
             CreateMap<CreateProdutoDto, Produto>();
+            CreateMap<Produto, ReadProdutoDto>();
         }
     }
 }

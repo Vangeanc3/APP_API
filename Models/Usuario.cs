@@ -13,16 +13,14 @@ namespace APP_API.Models
     {
         public int Id { get; set; } // PK
         public string Nome { get; set; }
-        public int Telefone { get; set; }
-        [Key]
+        public string Telefone { get; set; }
         public string Email { get; set; } // Unica 
         public string Senha { get; set; }
         public Role Role { get; set; } // Profissao
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;
-        public int EnderecoId { get; set; } // Endereço FK
         [JsonIgnore]
-        public virtual Endereco? Endereco { get; set; } // Endereço
+        public virtual List<Endereco>? Enderecos { get; set; } // Endereços e pode ser null
         [JsonIgnore]
         public virtual List<Orcamento>? Orcamentos { get; set; } // O Usuario pode criar um orcamento
         [JsonIgnore]

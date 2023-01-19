@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace APP_API.Controllers
 {
@@ -33,6 +34,34 @@ namespace APP_API.Controllers
             await context.Produtos.AddAsync(produto);
             await context.SaveChangesAsync();
             return Ok(produto);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BuscarProdutos([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        {
+            List<Produto> produtos = await context.Produtos.ToListAsync();
+            List<ReadProdutoDto> produtosDto = mapper.Map<List<ReadProdutoDto>>(produtos);
+
+            return Ok(produtosDto);
+        }
+
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<IActionResult> BuscarProdutoPorId
+      (
+          [FromServices] AppDbContext context,
+          [FromServices] IMapper mapper,
+          [FromRoute] int id
+      )
+        {
+            var produtos = await context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (produtos is null)
+                BadRequest();
+
+            ReadProdutoDto readProdutosDto = mapper.Map<ReadProdutoDto>(produtos);
+
+            return Ok(readProdutosDto);
         }
     }
 }
