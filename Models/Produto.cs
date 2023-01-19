@@ -13,17 +13,17 @@ namespace APP_API.Models
         public double PrecoCliente { get; set; } // Preciso de detalhes
         public string LinkImg { get; set; }
         public string LinkPdfManual { get; set; }
-        public Categoria Categoria { get; set; } // Preciso de detalhes
+        public int? LinhaId { get; set; } // FK Linha pode ser null
+        [Required(ErrorMessage = "Produto tem que ter uma categoria")]
+        public int CategoriaId { get; set; }
         [JsonIgnore]
-        public ICollection<Orcamento>? Orcamentos { get; set; }
+        public virtual Categoria Categoria { get; set; }
         [JsonIgnore]
-        public ICollection<Pedido>? Pedidos { get; set; }
+        public virtual Linha? Linha { get; set; } // LINHA
+        [JsonIgnore]
+        public virtual ICollection<Orcamento>? Orcamentos { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Pedido>? Pedidos { get; set; }
 
-    }
-
-    public enum Categoria
-    {
-        Digital,
-        Fisico
     }
 }

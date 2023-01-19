@@ -14,12 +14,12 @@ namespace APP_API.Models
         public string Identificador { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
         public string DescricaoServico { get; set; }
-        public Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
-        public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
         [JsonIgnore]
-        public ICollection<Produto> Produtos { get; set; } // Produtos do orcamento
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
+        public int InstaladorId { get; set; } // FK do Instalador 1 - N
+        public virtual Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
+        public virtual ICollection<Produto> Produtos { get; set; } // Produtos do orcamento
     }
 }
 

@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230111210046_migracao-de-usuario")]
-    partial class migracaodeusuario
+    [Migration("20230119195811_teste")]
+    partial class teste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,13 +20,31 @@ namespace APPAPI.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.1")
+                .HasAnnotation("Proxies:ChangeTracking", false)
+                .HasAnnotation("Proxies:CheckEquality", false)
+                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            modelBuilder.Entity("APP_API.Models.Categoria", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categorias");
+                });
 
             modelBuilder.Entity("APP_API.Models.Endereco", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("int");
 
                     b.Property<string>("Apartamento")
                         .IsRequired()
@@ -51,9 +69,34 @@ namespace APPAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("UsuarioId");
+
                     b.ToTable("Enderecos");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<int>("CategoriaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoriaId");
+
+                    b.ToTable("Linhas");
                 });
 
             modelBuilder.Entity("APP_API.Models.Orcamento", b =>
@@ -65,9 +108,8 @@ namespace APPAPI.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("InstaladorEmail")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("InstaladorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("NomeCliente")
                         .IsRequired()
@@ -81,7 +123,7 @@ namespace APPAPI.Migrations
 
                     b.HasKey("Identificador");
 
-                    b.HasIndex("InstaladorEmail");
+                    b.HasIndex("InstaladorId");
 
                     b.ToTable("Orcamentos");
                 });
@@ -98,16 +140,15 @@ namespace APPAPI.Migrations
                     b.Property<int>("FormaDePagamento")
                         .HasColumnType("int");
 
-                    b.Property<string>("InstaladorEmail")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("InstaladorId")
+                        .HasColumnType("int");
 
                     b.Property<double>("Preco")
                         .HasColumnType("double");
 
                     b.HasKey("Identificador");
 
-                    b.HasIndex("InstaladorEmail");
+                    b.HasIndex("InstaladorId");
 
                     b.ToTable("Pedidos");
                 });
@@ -118,12 +159,15 @@ namespace APPAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("Categoria")
+                    b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("LinhaId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LinkImg")
                         .IsRequired()
@@ -145,22 +189,25 @@ namespace APPAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoriaId");
+
+                    b.HasIndex("LinhaId");
+
                     b.ToTable("Produtos");
                 });
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("Cpf")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("EnderecoId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -176,12 +223,13 @@ namespace APPAPI.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<int>("Telefone")
-                        .HasColumnType("int");
+                    b.Property<string>("Telefone")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasKey("Email");
+                    b.HasKey("Id");
 
-                    b.HasIndex("EnderecoId")
+                    b.HasIndex("Email")
                         .IsUnique();
 
                     b.ToTable("Usuarios");
@@ -217,11 +265,33 @@ namespace APPAPI.Migrations
                     b.ToTable("PedidoProdutos", (string)null);
                 });
 
+            modelBuilder.Entity("APP_API.Models.Endereco", b =>
+                {
+                    b.HasOne("APP_API.Models.Usuario", "Usuario")
+                        .WithMany("Enderecos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.HasOne("APP_API.Models.Categoria", "Categoria")
+                        .WithMany("Linhas")
+                        .HasForeignKey("CategoriaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Categoria");
+                });
+
             modelBuilder.Entity("APP_API.Models.Orcamento", b =>
                 {
                     b.HasOne("APP_API.Models.Usuario", "Instalador")
                         .WithMany("Orcamentos")
-                        .HasForeignKey("InstaladorEmail")
+                        .HasForeignKey("InstaladorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -232,22 +302,28 @@ namespace APPAPI.Migrations
                 {
                     b.HasOne("APP_API.Models.Usuario", "Instalador")
                         .WithMany("Pedidos")
-                        .HasForeignKey("InstaladorEmail")
+                        .HasForeignKey("InstaladorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Instalador");
                 });
 
-            modelBuilder.Entity("APP_API.Models.Usuario", b =>
+            modelBuilder.Entity("APP_API.Models.Produto", b =>
                 {
-                    b.HasOne("APP_API.Models.Endereco", "Endereco")
-                        .WithOne("Usuario")
-                        .HasForeignKey("APP_API.Models.Usuario", "EnderecoId")
+                    b.HasOne("APP_API.Models.Categoria", "Categoria")
+                        .WithMany("Produtos")
+                        .HasForeignKey("CategoriaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Endereco");
+                    b.HasOne("APP_API.Models.Linha", "Linha")
+                        .WithMany("Produtos")
+                        .HasForeignKey("LinhaId");
+
+                    b.Navigation("Categoria");
+
+                    b.Navigation("Linha");
                 });
 
             modelBuilder.Entity("OrcamentoProduto", b =>
@@ -280,14 +356,22 @@ namespace APPAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("APP_API.Models.Endereco", b =>
+            modelBuilder.Entity("APP_API.Models.Categoria", b =>
                 {
-                    b.Navigation("Usuario")
-                        .IsRequired();
+                    b.Navigation("Linhas");
+
+                    b.Navigation("Produtos");
+                });
+
+            modelBuilder.Entity("APP_API.Models.Linha", b =>
+                {
+                    b.Navigation("Produtos");
                 });
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>
                 {
+                    b.Navigation("Enderecos");
+
                     b.Navigation("Orcamentos");
 
                     b.Navigation("Pedidos");

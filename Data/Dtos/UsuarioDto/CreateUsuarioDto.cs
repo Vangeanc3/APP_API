@@ -7,13 +7,11 @@ namespace APP_API.Data.Dtos.UsuarioDto
         [Required]
         public string Nome { get; set; }
         [Required]
-        public int Telefone { get; set; }
-        [Key]
+        public string Telefone { get; set; }
         [Required]
         public string Email { get; set; } // PK
         [Required]
         public string Senha { get; set; }
         public string? Cpf { get; set; }  // Pode ser null
-        public Guid EnderecoId { get; set; } // Endereço FK
     }
 }

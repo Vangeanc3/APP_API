@@ -7,6 +7,7 @@ using APP_API.Interfaces;
 using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data.Dtos.UsuarioDto;
+using AutoMapper;
 
 namespace APP_API.Controllers
 {
@@ -15,21 +16,24 @@ namespace APP_API.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpGet]
-        //[Route()]
-        [Authorize(Roles = "Usuario.Role.3")]
+        [Route("{skip}/{take}")]
         public async Task<ActionResult> RetornarUsuarios
-            ([FromServices] AppDbContext context,
+            (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
             [FromRoute] int skip = 0,
-            [FromRoute] int take = 100)
+            [FromRoute] int take = 100
+            )
         {
             var total = await context.Usuarios.CountAsync();
-            var todos = await
+            var usuarios = await
                 context
                 .Usuarios
-                .AsNoTracking()
                 .Skip(skip)
                 .Take(take)
                 .ToListAsync();
+
+            List<ReadUsuarioDto> usuarioDtos = mapper.Map<List<ReadUsuarioDto>>(usuarios);
 
             return Ok(
                 new
@@ -37,7 +41,7 @@ namespace APP_API.Controllers
                     total,
                     skip,
                     take,
-                    data = todos
+                    data = usuarioDtos
                 }
                 );
         }
@@ -45,14 +49,19 @@ namespace APP_API.Controllers
         [HttpGet]
         [Route("{usuarioemail}")]
         public async Task<IActionResult> RetornaUsuario
-        ([FromServices] AppDbContext context,
-         [FromRoute] string usuarioemail)
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
+            [FromRoute] string usuarioemail
+        )
         {
-            var usuario = await context.
-            Usuarios.
-            AsNoTracking()
+            var usuario = await context
+            .Usuarios
             .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower());
-            return Ok(usuario);
+
+            ReadUsuarioDto usuarioDto = mapper.Map<ReadUsuarioDto>(usuario);
+
+            return Ok(usuarioDto);
         }
 
         [HttpPost]
@@ -74,7 +83,8 @@ namespace APP_API.Controllers
 
             return new
             {
-                user,
+                user.Nome,
+                user.Role,
                 token
             };
         }
