@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APPAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230125032252_teste")]
+    [Migration("20230125192153_teste")]
     partial class teste
     {
         /// <inheritdoc />
@@ -45,8 +45,8 @@ namespace APPAPI.Migrations
                     b.Property<int>("ProdutoId")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrcamentoId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("OrcamentoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("QuantProdutos")
                         .HasColumnType("int");
@@ -119,12 +119,17 @@ namespace APPAPI.Migrations
 
             modelBuilder.Entity("APP_API.Models.Orcamento", b =>
                 {
-                    b.Property<string>("IdentificadorUnico")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("DescricaoServico")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<string>("IdentificadorUnico")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("InstaladorId")
                         .HasColumnType("int");
@@ -139,7 +144,10 @@ namespace APPAPI.Migrations
                     b.Property<double>("PrecoServico")
                         .HasColumnType("double");
 
-                    b.HasKey("IdentificadorUnico");
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdentificadorUnico")
+                        .IsUnique();
 
                     b.HasIndex("InstaladorId");
 

@@ -13,6 +13,7 @@ namespace APP_API.Profiles
         public OrcamentoProfile()
         {
             CreateMap<CreateOrcamentoDto, Orcamento>();
+            CreateMap<Orcamento, ReadOrcamentoDto>();
         }
     }
 }

@@ -17,8 +17,8 @@ namespace APP_API.Data
             builder.Entity<Usuario>()
                 .HasIndex(usuario => usuario.Email).IsUnique();
 
-            // builder.Entity<Orcamento>()
-            // .HasIndex(orcamento => orcamento.IdentificadorUnico).IsUnique();
+            builder.Entity<Orcamento>()
+            .HasIndex(orcamento => orcamento.IdentificadorUnico).IsUnique();
             // FIM DOS ATRIBUTOS UNICOS 
 
             // Fazendo relações entre tabelas

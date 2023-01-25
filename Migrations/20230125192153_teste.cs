@@ -111,6 +111,8 @@ namespace APPAPI.Migrations
                 name: "Orcamentos",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     IdentificadorUnico = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NomeCliente = table.Column<string>(type: "longtext", nullable: false)
@@ -123,7 +125,7 @@ namespace APPAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orcamentos", x => x.IdentificadorUnico);
+                    table.PrimaryKey("PK_Orcamentos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orcamentos_Usuarios_InstaladorId",
                         column: x => x.InstaladorId,
@@ -199,8 +201,7 @@ namespace APPAPI.Migrations
                 columns: table => new
                 {
                     ProdutoId = table.Column<int>(type: "int", nullable: false),
-                    OrcamentoId = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    OrcamentoId = table.Column<int>(type: "int", nullable: false),
                     QuantProdutos = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -210,7 +211,7 @@ namespace APPAPI.Migrations
                         name: "FK_DetalheOrcamento_Orcamentos_OrcamentoId",
                         column: x => x.OrcamentoId,
                         principalTable: "Orcamentos",
-                        principalColumn: "IdentificadorUnico",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_DetalheOrcamento_Produtos_ProdutoId",
@@ -261,6 +262,12 @@ namespace APPAPI.Migrations
                 name: "IX_Linhas_CategoriaId",
                 table: "Linhas",
                 column: "CategoriaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orcamentos_IdentificadorUnico",
+                table: "Orcamentos",
+                column: "IdentificadorUnico",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orcamentos_InstaladorId",
