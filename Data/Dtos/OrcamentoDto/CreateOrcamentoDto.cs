@@ -6,13 +6,17 @@ namespace APP_API.Data.Dtos.OrcamentoDto
 {
     public class CreateOrcamentoDto
     {
-        [Key]
-        [Required]
-        public string Identificador { get; set; }
+        public string IdentificadorUnico { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
         public string DescricaoServico { get; set; }
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
-        public string InstaladorEmail { get; set; } // FK do Instalador 1 - N
+        public int InstaladorId { get; set; } // FK do Instalador 1 - N
+        public List<ProdutoOrcamento> ProdutosDoOrcamento { get; set; } // 
+    }
+
+    public class ProdutoOrcamento{
+        public int IdProduto { get; set; }
+        public int Quantidade { get; set; }
     }
 }

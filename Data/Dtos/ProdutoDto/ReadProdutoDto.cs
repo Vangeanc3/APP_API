@@ -8,6 +8,7 @@ namespace APP_API.Data.Dtos.ProdutoDto
     {
         public int Id { get; set; }
         public string Nome { get; set; }
+        public int QuantEstoque { get; set; }
         public string Descricao { get; set; }
         public double PrecoParceiro { get; set; } // Preciso de detalhes
         public double PrecoCliente { get; set; } // Preciso de detalhes
