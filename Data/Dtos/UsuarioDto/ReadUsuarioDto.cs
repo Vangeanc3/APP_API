@@ -9,7 +9,6 @@ namespace APP_API.Data.Dtos.UsuarioDto
         public string Nome { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; } // Unica 
-        public string Senha { get; set; }
         public Role Role { get; set; } // Profissao
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;

@@ -5,10 +5,10 @@ namespace APP_API.Data.Dtos.UsuarioDto
     public class CreateUsuarioDto
     {
         [Required]
-        [MaxLength(35, ErrorMessage = "O nome não exceder 35 caracteres!!!")]
+        [MaxLength(35, ErrorMessage = "O nome não pode exceder 35 caracteres!!!")]
         public string Nome { get; set; }
         [Required]
-        [RegularExpression(@"^\d{3}-\d{3}-\d{4}$", ErrorMessage = "Número de telefone inválido")]
+        [RegularExpression(@"^\d{2}-\d{5}-\d{4}$", ErrorMessage = "Número de telefone inválido")]
         public string Telefone { get; set; }
         [Required]
         [EmailAddress]

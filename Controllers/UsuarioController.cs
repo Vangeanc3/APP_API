@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data.Dtos.UsuarioDto;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace APP_API.Controllers
 {
@@ -52,16 +53,65 @@ namespace APP_API.Controllers
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] string usuarioemail
+            [FromRoute] [EmailAddress] string usuarioemail
         )
         {
             var usuario = await context
             .Usuarios
             .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower());
 
+            if (usuario is null)
+            {
+                return NotFound("Usuario não encontrado");
+            }
+
             ReadUsuarioDto usuarioDto = mapper.Map<ReadUsuarioDto>(usuario);
 
             return Ok(usuarioDto);
+        }
+
+        [HttpPut]
+        [Route("atualizar/{email}")]
+        public async Task<IActionResult> AtualizarUsuario
+            (
+                [FromServices] AppDbContext context,
+                [FromServices] IMapper mapper,
+                [FromRoute] [EmailAddress] string email,
+                [FromBody] CreateUsuarioDto usuarioDto
+            )
+        {
+            if (email is null)
+            {
+                return BadRequest("O email está nulo");
+            }
+
+            if (usuarioDto is null)
+            {
+                return BadRequest("Os dados estão nulos");
+            }
+            
+            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
+
+            context.Entry(usuario).State = EntityState.Modified;
+
+            try
+            {
+                await context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (email != usuario.Email)
+                {
+                    return BadRequest("Usuário não existe");
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+
         }
 
         [HttpPost]
@@ -77,7 +127,7 @@ namespace APP_API.Controllers
                 .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioDto.Email.ToLower() && x.Senha.ToLower() == usuarioDto.Senha.ToLower());
 
             if (user is null)
-                return NotFound(new { message = "Usuario ou senha inválidos" });
+                return NotFound(new { message = "Email ou senha inválidos" });
 
             var token = tokenService.GerarToken(user);
 

@@ -11,6 +11,7 @@ namespace APP_API.Models
     {
         [Key]
         [Required]
+        [JsonIgnore]
         public int Id { get; set; }
         public string IdentificadorUnico { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
