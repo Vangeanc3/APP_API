@@ -1,4 +1,6 @@
 *.md
+.md
+.md.*
 *.sln
 appsettings.json
 appsettings.Development.json
