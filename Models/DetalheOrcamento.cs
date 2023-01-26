@@ -12,6 +12,7 @@ namespace APP_API.Models
         [JsonIgnore]
         public virtual Produto Produto { get; set; }
         public int QuantProdutos { get; set; }
+        [JsonIgnore]
         public int OrcamentoId { get; set; }
         [JsonIgnore]
         public virtual Orcamento Orcamento { get; set; }

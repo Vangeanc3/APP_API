@@ -21,12 +21,13 @@ namespace APP_API.Controllers
          [FromServices] IMapper mapper,
          [FromBody] CreateUsuarioDto usuarioDto)
         {
+           if (usuarioDto is null)
+            {
+                return BadRequest("O usuário está nulo!!!");
+            }
+            
             Usuario usuario = mapper.Map<Usuario>(usuarioDto);
 
-            if (usuario is null)
-            {
-                return BadRequest();
-            }
             usuario.Role = Role.Cliente;
             await context.Usuarios.AddAsync(usuario);
             await context.SaveChangesAsync();

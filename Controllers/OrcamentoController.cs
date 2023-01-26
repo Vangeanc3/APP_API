@@ -1,8 +1,7 @@
-﻿using APP_API.Data.Dtos.ProdutoDto;
+﻿using APP_API.Data.Dtos.DetalheOrcamentoDto;
 using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using APP_API.Data.Dtos.OrcamentoDto;
 
@@ -25,7 +24,7 @@ namespace APP_API.Controllers
             }
 
             Orcamento orcamento = mapper.Map<Orcamento>(orcamentoDto);
-           
+
             if (orcamento is null)
             {
                 return BadRequest();
@@ -61,24 +60,24 @@ namespace APP_API.Controllers
                 [FromServices] AppDbContext context,
                 [FromServices] IMapper mapper,
                 [FromRoute] int id
-                
+
             )
         {
             var orcamento = context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
             ReadOrcamentoDto orcamentoDto = mapper.Map<ReadOrcamentoDto>(orcamento);
             return Ok
                 (
-                new
-                {
-                    orcamentoDto.Id,
-                    orcamentoDto.IdentificadorUnico,
-                    orcamentoDto.NomeCliente,
-                    orcamentoDto.DescricaoServico,
-                    orcamentoDto.PrecoServico,
-                    orcamentoDto.PrecoFinal,
-                    instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
-                    produtos = orcamentoDto.DetalhesOrcamentos
-                }
+                    new
+                    {
+                        orcamentoDto.Id,
+                        orcamentoDto.IdentificadorUnico,
+                        orcamentoDto.NomeCliente,
+                        orcamentoDto.DescricaoServico,
+                        orcamentoDto.PrecoServico,
+                        orcamentoDto.PrecoFinal,
+                        instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
+                        produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
+                    }
                 );
         }
     }

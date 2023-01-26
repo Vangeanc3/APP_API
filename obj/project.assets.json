@@ -2881,26 +2881,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\est_imartins\\.nuget\\packages\\": {}
+    "C:\\Users\\ismae\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\est_imartins\\Desktop\\APP_API\\APP_API.csproj",
+      "projectUniqueName": "C:\\Users\\ismae\\OneDrive\\Área de Trabalho\\APP_API\\APP_API.csproj",
       "projectName": "APP_API",
-      "projectPath": "C:\\Users\\est_imartins\\Desktop\\APP_API\\APP_API.csproj",
-      "packagesPath": "C:\\Users\\est_imartins\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\est_imartins\\Desktop\\APP_API\\obj\\",
+      "projectPath": "C:\\Users\\ismae\\OneDrive\\Área de Trabalho\\APP_API\\APP_API.csproj",
+      "packagesPath": "C:\\Users\\ismae\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\ismae\\OneDrive\\Área de Trabalho\\APP_API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\est_imartins\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\ismae\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net6.0"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -2983,7 +2981,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
