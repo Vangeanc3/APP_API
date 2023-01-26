@@ -1,0 +1,9 @@
+*.md
+*.sln
+appsettings.json
+appsettings.Development.json
+/bin/
+/.vscode/
+/.vs/
+/obj/
+
