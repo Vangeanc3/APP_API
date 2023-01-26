@@ -29,7 +29,6 @@ namespace APP_API.Controllers
 
             Categoria categoria = mapper.Map<Categoria>(categoriaDto);
 
-
             await context.Categorias.AddAsync(categoria);
             await context.SaveChangesAsync();
             return Ok(categoria);

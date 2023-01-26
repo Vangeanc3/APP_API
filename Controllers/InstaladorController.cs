@@ -16,15 +16,14 @@ namespace APP_API.Controllers
         public async Task<IActionResult> CriarInstalador
         ([FromServices] AppDbContext context,
          [FromServices] IMapper mapper,
-        [FromBody]CreateUsuarioDto usuarioDto)
+        [FromBody] CreateUsuarioDto usuarioDto)
         {
-            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
-
-
-            if (usuario is null)
+            if (usuarioDto is null)
             {
-                return BadRequest();
+                return BadRequest("O usuário está nulo!!!");
             }
+
+            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
 
             usuario.Role = Role.Instalador;
             await context.Usuarios.AddAsync(usuario);
@@ -62,7 +61,7 @@ namespace APP_API.Controllers
         [HttpGet]
         [Route("autenticado")]
         [Authorize]
-        public string Autenticado() => $"Autenticado - { User.Identity.Name }";
+        public string Autenticado() => $"Autenticado - {User.Identity.Name}";
 
         [HttpGet]
         [Route("instalador")]
@@ -72,6 +71,6 @@ namespace APP_API.Controllers
         [HttpGet]
         [Route("vendedor")]
         [Authorize(Roles = "Vendedor")]
-        public string Vendedor() => $"Vendedor";    
+        public string Vendedor() => $"Vendedor";
     }
 }

@@ -111,7 +111,9 @@ namespace APPAPI.Migrations
                 name: "Orcamentos",
                 columns: table => new
                 {
-                    Identificador = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    IdentificadorUnico = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     NomeCliente = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -123,7 +125,7 @@ namespace APPAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orcamentos", x => x.Identificador);
+                    table.PrimaryKey("PK_Orcamentos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Orcamentos_Usuarios_InstaladorId",
                         column: x => x.InstaladorId,
@@ -163,6 +165,7 @@ namespace APPAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    QuantEstoque = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Descricao = table.Column<string>(type: "longtext", nullable: false)
@@ -173,8 +176,8 @@ namespace APPAPI.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     LinkPdfManual = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    LinhaId = table.Column<int>(type: "int", nullable: true),
-                    CategoriaId = table.Column<int>(type: "int", nullable: false)
+                    CategoriaId = table.Column<int>(type: "int", nullable: false),
+                    LinhaId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -194,25 +197,25 @@ namespace APPAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "OrcamentoProdutos",
+                name: "DetalheOrcamento",
                 columns: table => new
                 {
-                    OrcamentosIdentificador = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProdutosId = table.Column<int>(type: "int", nullable: false)
+                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    OrcamentoId = table.Column<int>(type: "int", nullable: false),
+                    QuantProdutos = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrcamentoProdutos", x => new { x.OrcamentosIdentificador, x.ProdutosId });
+                    table.PrimaryKey("PK_DetalheOrcamento", x => new { x.ProdutoId, x.OrcamentoId });
                     table.ForeignKey(
-                        name: "FK_OrcamentoProdutos_Orcamentos_OrcamentosIdentificador",
-                        column: x => x.OrcamentosIdentificador,
+                        name: "FK_DetalheOrcamento_Orcamentos_OrcamentoId",
+                        column: x => x.OrcamentoId,
                         principalTable: "Orcamentos",
-                        principalColumn: "Identificador",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_OrcamentoProdutos_Produtos_ProdutosId",
-                        column: x => x.ProdutosId,
+                        name: "FK_DetalheOrcamento_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
                         principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -246,6 +249,11 @@ namespace APPAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DetalheOrcamento_OrcamentoId",
+                table: "DetalheOrcamento",
+                column: "OrcamentoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Enderecos_UsuarioId",
                 table: "Enderecos",
                 column: "UsuarioId");
@@ -256,9 +264,10 @@ namespace APPAPI.Migrations
                 column: "CategoriaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrcamentoProdutos_ProdutosId",
-                table: "OrcamentoProdutos",
-                column: "ProdutosId");
+                name: "IX_Orcamentos_IdentificadorUnico",
+                table: "Orcamentos",
+                column: "IdentificadorUnico",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orcamentos_InstaladorId",
@@ -296,10 +305,10 @@ namespace APPAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Enderecos");
+                name: "DetalheOrcamento");
 
             migrationBuilder.DropTable(
-                name: "OrcamentoProdutos");
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
                 name: "PedidoProdutos");

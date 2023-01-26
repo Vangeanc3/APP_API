@@ -23,12 +23,12 @@ namespace APP_API.Controllers
          [FromServices] IMapper mapper,
          [FromBody]CreateUsuarioDto usuarioDto) // Usando o mapeando do AutoMapper
         {
+            if (usuarioDto is null)
+            {
+                return BadRequest("O usuário está nulo!!!");
+            }
             Usuario user = mapper.Map<Usuario>(usuarioDto);
 
-            if (user is null)
-            {
-                return BadRequest();
-            }
             user.Role = Role.Administrador;
             await context.Usuarios.AddAsync(user);
             await context.SaveChangesAsync();

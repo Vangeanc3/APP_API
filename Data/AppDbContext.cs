@@ -13,8 +13,13 @@ namespace APP_API.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
-            builder.Entity<Usuario>() // Definindo um atributo unico
+            // Definindo um atributos unico
+            builder.Entity<Usuario>()
                 .HasIndex(usuario => usuario.Email).IsUnique();
+
+            builder.Entity<Orcamento>()
+            .HasIndex(orcamento => orcamento.IdentificadorUnico).IsUnique();
+            // FIM DOS ATRIBUTOS UNICOS 
 
             // Fazendo relações entre tabelas
             builder.Entity<Endereco>() // Usuario tem um Endereço
@@ -32,7 +37,7 @@ namespace APP_API.Data
             .WithMany(instalador => instalador.Pedidos)
             .HasForeignKey(pedido => pedido.InstaladorId);
 
-            builder.Entity<Linha>() // Relação entre linha? e categoria
+            builder.Entity<Linha>() // Relação entre linha e categoria
                 .HasOne(linha => linha.Categoria)
                 .WithMany(categoria => categoria.Linhas)
                 .HasForeignKey(linha => linha.CategoriaId);
@@ -47,16 +52,28 @@ namespace APP_API.Data
                 .WithMany(linha => linha.Produtos)
                 .HasForeignKey(produto => produto.LinhaId);
 
-            builder.Entity<Produto>() // Relacao N para N => Produto está em vários orcamentos e vice versa
-                .HasMany(produto => produto.Orcamentos)
-                .WithMany(orcamentos => orcamentos.Produtos)
-                .UsingEntity(juncao => juncao.ToTable("OrcamentoProdutos")); // No final vai virar essa tabela
+            // builder.Entity<Produto>() // Relacao N para N => Produto está em vários orcamentos e vice versa
+            //     .HasMany(produto => produto.Orcamentos)
+            //     .WithMany(orcamentos => orcamentos.Produtos)
+            //     .UsingEntity(juncao => juncao.ToTable("OrcamentoProdutos")); // No final vai virar essa tabela
 
             builder.Entity<Produto>() // Relacao N para N => Produto está em vários pedidos e vice versa
                 .HasMany(produto => produto.Pedidos)
                 .WithMany(pedidos => pedidos.Produtos)
                 .UsingEntity(juncao => juncao.ToTable("PedidoProdutos")); // No final vai virar essa tabela
 
+            builder.Entity<DetalheOrcamento>()
+            .HasKey(op => new { op.ProdutoId, op.OrcamentoId });
+
+            builder.Entity<DetalheOrcamento>()
+            .HasOne(op => op.Orcamento)
+            .WithMany(orcamento => orcamento.DetalhesOrcamentos)
+            .HasForeignKey(op => op.OrcamentoId);
+
+            builder.Entity<DetalheOrcamento>()
+            .HasOne(op => op.Produto)
+            .WithMany(produto => produto.DetalheOrcamentos)
+            .HasForeignKey(op => op.ProdutoId);
         }
 
         public DbSet<Usuario> Usuarios { get; set; } = default!;
@@ -66,6 +83,7 @@ namespace APP_API.Data
         public DbSet<Categoria> Categorias { get; set; } = default!;
         public DbSet<Linha> Linhas { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
+        public DbSet<DetalheOrcamento> DetalheOrcamento { get; set; }
 
     }
 }
