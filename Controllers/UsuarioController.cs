@@ -71,47 +71,40 @@ namespace APP_API.Controllers
         }
 
         [HttpPut]
-        [Route("atualizar/{email}")]
+        [Route("atualizar/{id}")]
         public async Task<IActionResult> AtualizarUsuario
             (
                 [FromServices] AppDbContext context,
                 [FromServices] IMapper mapper,
-                [FromRoute] [EmailAddress] string email,
-                [FromBody] CreateUsuarioDto usuarioDto
+                [FromRoute] int id,
+                [FromBody] PutUsuarioDto usuarioDto
             )
         {
-            if (email is null)
-            {
-                return BadRequest("O email está nulo");
-            }
-
-            if (usuarioDto is null)
-            {
-                return BadRequest("Os dados estão nulos");
-            }
-            
             Usuario usuario = mapper.Map<Usuario>(usuarioDto);
 
-            context.Entry(usuario).State = EntityState.Modified;
+            if (usuario == null)
+            {
+                return BadRequest();
+            }
 
-            try
+            var existeUsuario = await context.Usuarios.FindAsync(id);
+
+            if (existeUsuario is null)
             {
-                await context.SaveChangesAsync();
+                return NotFound("O usuario não existe");
             }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (email != usuario.Email)
-                {
-                    return BadRequest("Usuário não existe");
-                }
-                else
-                {
-                    throw;
-                }
-            }
+
+
+            existeUsuario.Nome =             usuario.Nome != null ? usuario.Nome     : existeUsuario.Nome;
+            existeUsuario.Telefone =     usuario.Telefone != null ? usuario.Telefone : existeUsuario.Telefone;
+            existeUsuario.Cpf =               usuario.Cpf != null ? usuario.Cpf      : existeUsuario.Cpf;
+            existeUsuario.Email =           usuario.Email != null ? usuario.Email    : existeUsuario.Email;
+            existeUsuario.Senha =           usuario.Senha != null ? usuario.Senha    : existeUsuario.Senha;
+
+            context.Usuarios.Update(existeUsuario);
+            await context.SaveChangesAsync();
 
             return NoContent();
-
         }
 
         [HttpPost]

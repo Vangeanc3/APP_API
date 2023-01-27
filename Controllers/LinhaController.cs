@@ -4,6 +4,7 @@ using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using APP_API.Data.Dtos.EnderecoDto;
 
 namespace APP_API.Controllers
 {
@@ -29,6 +30,34 @@ namespace APP_API.Controllers
             await context.Linhas.AddAsync(linha);
             await context.SaveChangesAsync();
             return Ok(linha);
+        }
+
+        [HttpPut]
+        [Route("atualizar/{id}")]
+        public async Task<IActionResult> AtualizarLinha
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
+            [FromRoute] int id,
+            [FromBody] PutLinhaDto putLinhaDto
+        )
+        {
+            Linha linha = mapper.Map<Linha>(putLinhaDto); 
+
+            var existeLinha = await context.Linhas.FindAsync(id);
+
+            if (existeLinha is null)
+            {
+                return NotFound("Linha não existe");
+            }
+
+            existeLinha.Nome = putLinhaDto.Nome != null ? putLinhaDto.Nome : existeLinha.Nome;
+            existeLinha.CategoriaId = linha.CategoriaId != null ? linha.CategoriaId : existeLinha.CategoriaId;
+
+            context.Linhas.Update(existeLinha);
+            await context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpGet]

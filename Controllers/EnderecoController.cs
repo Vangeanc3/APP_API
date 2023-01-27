@@ -1,4 +1,5 @@
 ﻿using APP_API.Data;
+using APP_API.Data.Dtos.CategoriaDto;
 using APP_API.Data.Dtos.EnderecoDto;
 using APP_API.Models;
 using AutoMapper;
@@ -30,6 +31,39 @@ namespace APP_API.Controllers
             await context.Enderecos.AddAsync(endereco);
             await context.SaveChangesAsync();
             return Ok(endereco);
+        }
+
+
+        [HttpPut]
+        [Route("atualizar/{id}")]
+        public async Task<IActionResult> AtualizarEndereco
+          (
+              [FromServices] AppDbContext context,
+              [FromServices] IMapper mapper,
+              [FromRoute] int id,
+              [FromBody] PutEnderecoDto enderecoDto    
+          )
+        {
+            Endereco endereco = mapper.Map<Endereco>(enderecoDto);
+
+            var existeEndereco = await context.Enderecos.FindAsync(id);
+
+            if (existeEndereco is null)
+            {
+                return NotFound("Endereço não existe");
+            }
+
+            existeEndereco.Cep =                 endereco.Cep != null ? endereco.Cep          : existeEndereco.Cep;
+            existeEndereco.Bloco =             endereco.Bloco != null ? endereco.Bloco        : existeEndereco.Bloco;
+            existeEndereco.Numero =           endereco.Numero != null ? endereco.Numero       : existeEndereco.Numero;
+            existeEndereco.Bairro =           endereco.Bairro != null ? endereco.Bairro       : existeEndereco.Bairro;
+            existeEndereco.Apartamento = endereco.Apartamento != null ? endereco.Apartamento  : existeEndereco.Apartamento;
+            existeEndereco.Rua =                 endereco.Rua != null ? endereco.Rua          : existeEndereco.Rua;
+
+            context.Enderecos.Update(existeEndereco);
+            await context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpGet]

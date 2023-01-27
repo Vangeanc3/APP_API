@@ -9,6 +9,7 @@ namespace APP_API.Profiles
         public UsuarioProfile()
         {
             CreateMap<CreateUsuarioDto, Usuario>();
+            CreateMap<PutUsuarioDto, Usuario>();
             CreateMap<Usuario, ReadUsuarioDto>();
         }
     }
