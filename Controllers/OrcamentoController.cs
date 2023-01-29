@@ -59,26 +59,37 @@ namespace APP_API.Controllers
             (
                 [FromServices] AppDbContext context,
                 [FromServices] IMapper mapper,
-                [FromRoute] int id
+                [FromRoute] int? id
 
             )
         {
-            var orcamento = context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
-            ReadOrcamentoDto orcamentoDto = mapper.Map<ReadOrcamentoDto>(orcamento);
-            return Ok
-                (
-                    new
-                    {
-                        orcamentoDto.Id,
-                        orcamentoDto.IdentificadorUnico,
-                        orcamentoDto.NomeCliente,
-                        orcamentoDto.DescricaoServico,
-                        orcamentoDto.PrecoServico,
-                        orcamentoDto.PrecoFinal,
-                        instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
-                        produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
-                    }
-                );
+            if (id.HasValue)
+            {
+                var orcamento = context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
+
+                ReadOrcamentoDto orcamentoDto = mapper.Map<ReadOrcamentoDto>(orcamento);
+
+                if (orcamentoDto is null)
+                {
+                    return NotFound("Orçamento não existe");
+                }
+
+                return Ok
+                    (
+                        new
+                        {
+                            orcamentoDto.Id,
+                            orcamentoDto.IdentificadorUnico,
+                            orcamentoDto.NomeCliente,
+                            orcamentoDto.DescricaoServico,
+                            orcamentoDto.PrecoServico,
+                            orcamentoDto.PrecoFinal,
+                            instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
+                            produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
+                        }
+                    );
+            }
+            return BadRequest("Orçamento não existe");
         }
     }
 }

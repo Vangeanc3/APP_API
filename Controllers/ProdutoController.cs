@@ -36,6 +36,8 @@ namespace APP_API.Controllers
             return Ok(produto);
         }
 
+
+
         [HttpGet]
         public async Task<IActionResult> BuscarProdutos([FromServices] AppDbContext context, [FromServices] IMapper mapper)
         {
@@ -63,5 +65,7 @@ namespace APP_API.Controllers
 
             return Ok(readProdutosDto);
         }
+
+
     }
 }

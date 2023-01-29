@@ -8,6 +8,7 @@ using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data.Dtos.UsuarioDto;
 using AutoMapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace APP_API.Controllers
 {
@@ -52,16 +53,58 @@ namespace APP_API.Controllers
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] string usuarioemail
+            [FromRoute] [EmailAddress] string usuarioemail
         )
         {
             var usuario = await context
             .Usuarios
             .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower());
 
+            if (usuario is null)
+            {
+                return NotFound("Usuario não encontrado");
+            }
+
             ReadUsuarioDto usuarioDto = mapper.Map<ReadUsuarioDto>(usuario);
 
             return Ok(usuarioDto);
+        }
+
+        [HttpPut]
+        [Route("atualizar/{id}")]
+        public async Task<IActionResult> AtualizarUsuario
+            (
+                [FromServices] AppDbContext context,
+                [FromServices] IMapper mapper,
+                [FromRoute] int id,
+                [FromBody] PutUsuarioDto usuarioDto
+            )
+        {
+            Usuario usuario = mapper.Map<Usuario>(usuarioDto);
+
+            if (usuario == null)
+            {
+                return BadRequest();
+            }
+
+            var existeUsuario = await context.Usuarios.FindAsync(id);
+
+            if (existeUsuario is null)
+            {
+                return NotFound("O usuario não existe");
+            }
+
+
+            existeUsuario.Nome =             usuario.Nome != null ? usuario.Nome     : existeUsuario.Nome;
+            existeUsuario.Telefone =     usuario.Telefone != null ? usuario.Telefone : existeUsuario.Telefone;
+            existeUsuario.Cpf =               usuario.Cpf != null ? usuario.Cpf      : existeUsuario.Cpf;
+            existeUsuario.Email =           usuario.Email != null ? usuario.Email    : existeUsuario.Email;
+            existeUsuario.Senha =           usuario.Senha != null ? usuario.Senha    : existeUsuario.Senha;
+
+            context.Usuarios.Update(existeUsuario);
+            await context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpPost]
@@ -77,7 +120,7 @@ namespace APP_API.Controllers
                 .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioDto.Email.ToLower() && x.Senha.ToLower() == usuarioDto.Senha.ToLower());
 
             if (user is null)
-                return NotFound(new { message = "Usuario ou senha inválidos" });
+                return NotFound(new { message = "Email ou senha inválidos" });
 
             var token = tokenService.GerarToken(user);
 
