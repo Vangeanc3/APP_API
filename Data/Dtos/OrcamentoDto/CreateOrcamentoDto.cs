@@ -1,4 +1,5 @@
-﻿using APP_API.Models;
+﻿using APP_API.Data.Dtos.ProdutoOrcamentoDto;
+using APP_API.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -13,10 +14,5 @@ namespace APP_API.Data.Dtos.OrcamentoDto
         public double PrecoFinal { get; set; }
         public int InstaladorId { get; set; } // FK do Instalador 1 - N
         public List<ProdutoOrcamento> ProdutosDoOrcamento { get; set; } // 
-    }
-
-    public class ProdutoOrcamento{
-        public int IdProduto { get; set; }
-        public int Quantidade { get; set; }
     }
 }

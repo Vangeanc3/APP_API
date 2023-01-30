@@ -8,7 +8,7 @@ using APP_API.Data.Dtos.EnderecoDto;
 
 namespace APP_API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("linha")]
     [ApiController]
     public class LinhaController : ControllerBase
     {
@@ -20,7 +20,6 @@ namespace APP_API.Controllers
           [FromBody] CreateLinhaDto linhaDto)
         {
             Linha linha = mapper.Map<Linha>(linhaDto);
-
 
             if (linha is null)
             {
@@ -86,6 +85,26 @@ namespace APP_API.Controllers
             ReadLinhaDto readLinhaDto = mapper.Map<ReadLinhaDto>(linha);
 
             return Ok(readLinhaDto);
+        }
+
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarLinha
+        (
+            [FromServices] AppDbContext context,
+            [FromQuery] int id
+        )
+        {
+            var linha = await context.Linhas.FindAsync(id);
+            if (linha is null)
+            {
+                return NotFound();
+            }
+
+            context.Linhas.Remove(linha);
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

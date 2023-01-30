@@ -68,7 +68,7 @@ namespace APP_API.Controllers
         {
             List<Categoria> categorias = await context.Categorias.ToListAsync();
             List<ReadLinhaDto> categoriaDto = mapper.Map<List<ReadLinhaDto>>(categorias);
-            
+
             return Ok(categoriaDto);
         }
 
@@ -83,7 +83,7 @@ namespace APP_API.Controllers
         {
             var categoria = await context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
 
-            if (categoria is null) 
+            if (categoria is null)
                 BadRequest();
 
             ReadLinhaDto categoriaDto = mapper.Map<ReadLinhaDto>(categoria);
@@ -91,7 +91,25 @@ namespace APP_API.Controllers
             return Ok(categoriaDto);
         }
 
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarCategoria
+                (
+                    [FromServices] AppDbContext context,
+                    [FromQuery] int id
+                )
+        {
+            var categoria = await context.Categorias.FindAsync(id);
+            if (categoria is null)
+            {
+                return NotFound();
+            }
 
+            context.Categorias.Remove(categoria);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
 
     }
 }

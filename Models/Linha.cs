@@ -9,6 +9,7 @@ namespace APP_API.Models
         [Key]
         public int Id { get; set; }
         public string Nome { get; set; }
+        [JsonIgnore]
         public int CategoriaId { get; set; }
         [JsonIgnore]
         public virtual Categoria Categoria { get; set; }
