@@ -104,7 +104,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> DeletarProduto
         (
             [FromServices] AppDbContext context,
-            [FromQuery] int id
+            [FromRoute] int id
         )
         {
             var produto = await context.Produtos.FindAsync(id);

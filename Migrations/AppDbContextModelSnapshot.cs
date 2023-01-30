@@ -55,6 +55,24 @@ namespace APPAPI.Migrations
                     b.ToTable("DetalheOrcamento");
                 });
 
+            modelBuilder.Entity("APP_API.Models.DetalhePedido", b =>
+                {
+                    b.Property<int>("PedidoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProdutoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("QuantProduto")
+                        .HasColumnType("int");
+
+                    b.HasKey("PedidoId", "ProdutoId");
+
+                    b.HasIndex("ProdutoId");
+
+                    b.ToTable("DetalhePedidos");
+                });
+
             modelBuilder.Entity("APP_API.Models.Endereco", b =>
                 {
                     b.Property<int>("Id")
@@ -153,8 +171,9 @@ namespace APPAPI.Migrations
 
             modelBuilder.Entity("APP_API.Models.Pedido", b =>
                 {
-                    b.Property<string>("Identificador")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
                     b.Property<string>("EntregaOpcao")
                         .IsRequired()
@@ -163,13 +182,17 @@ namespace APPAPI.Migrations
                     b.Property<int>("FormaDePagamento")
                         .HasColumnType("int");
 
+                    b.Property<string>("Identificador")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<int>("InstaladorId")
                         .HasColumnType("int");
 
                     b.Property<double>("Preco")
                         .HasColumnType("double");
 
-                    b.HasKey("Identificador");
+                    b.HasKey("Id");
 
                     b.HasIndex("InstaladorId");
 
@@ -261,21 +284,6 @@ namespace APPAPI.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("PedidoProduto", b =>
-                {
-                    b.Property<string>("PedidosIdentificador")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<int>("ProdutosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PedidosIdentificador", "ProdutosId");
-
-                    b.HasIndex("ProdutosId");
-
-                    b.ToTable("PedidoProdutos", (string)null);
-                });
-
             modelBuilder.Entity("APP_API.Models.DetalheOrcamento", b =>
                 {
                     b.HasOne("APP_API.Models.Orcamento", "Orcamento")
@@ -291,6 +299,25 @@ namespace APPAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Orcamento");
+
+                    b.Navigation("Produto");
+                });
+
+            modelBuilder.Entity("APP_API.Models.DetalhePedido", b =>
+                {
+                    b.HasOne("APP_API.Models.Pedido", "Pedido")
+                        .WithMany("DetalhePedidos")
+                        .HasForeignKey("PedidoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("APP_API.Models.Produto", "Produto")
+                        .WithMany("DetalhePedidos")
+                        .HasForeignKey("ProdutoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Pedido");
 
                     b.Navigation("Produto");
                 });
@@ -356,21 +383,6 @@ namespace APPAPI.Migrations
                     b.Navigation("Linha");
                 });
 
-            modelBuilder.Entity("PedidoProduto", b =>
-                {
-                    b.HasOne("APP_API.Models.Pedido", null)
-                        .WithMany()
-                        .HasForeignKey("PedidosIdentificador")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("APP_API.Models.Produto", null)
-                        .WithMany()
-                        .HasForeignKey("ProdutosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("APP_API.Models.Categoria", b =>
                 {
                     b.Navigation("Linhas");
@@ -388,9 +400,16 @@ namespace APPAPI.Migrations
                     b.Navigation("DetalhesOrcamentos");
                 });
 
+            modelBuilder.Entity("APP_API.Models.Pedido", b =>
+                {
+                    b.Navigation("DetalhePedidos");
+                });
+
             modelBuilder.Entity("APP_API.Models.Produto", b =>
                 {
                     b.Navigation("DetalheOrcamentos");
+
+                    b.Navigation("DetalhePedidos");
                 });
 
             modelBuilder.Entity("APP_API.Models.Usuario", b =>

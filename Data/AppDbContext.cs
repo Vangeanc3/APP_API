@@ -52,16 +52,21 @@ namespace APP_API.Data
                 .WithMany(linha => linha.Produtos)
                 .HasForeignKey(produto => produto.LinhaId);
 
-            // builder.Entity<Produto>() // Relacao N para N => Produto está em vários orcamentos e vice versa
-            //     .HasMany(produto => produto.Orcamentos)
-            //     .WithMany(orcamentos => orcamentos.Produtos)
-            //     .UsingEntity(juncao => juncao.ToTable("OrcamentoProdutos")); // No final vai virar essa tabela
 
-            builder.Entity<Produto>() // Relacao N para N => Produto está em vários pedidos e vice versa
-                .HasMany(produto => produto.Pedidos)
-                .WithMany(pedidos => pedidos.Produtos)
-                .UsingEntity(juncao => juncao.ToTable("PedidoProdutos")); // No final vai virar essa tabela
+            // RELAÇÕES N PARA N
+            builder.Entity<DetalhePedido>()
+                .HasKey(dp => new { dp.PedidoId, dp.ProdutoId });
 
+            builder.Entity<DetalhePedido>()
+                .HasOne(dp => dp.Pedido)
+                .WithMany(pedido => pedido.DetalhePedidos)
+                .HasForeignKey(dp => dp.PedidoId);
+
+            builder.Entity<DetalhePedido>()
+                .HasOne(dp => dp.Produto)
+                .WithMany(produto => produto.DetalhePedidos)
+                .HasForeignKey(dp => dp.ProdutoId);
+            ////////////////////////////////////////
             builder.Entity<DetalheOrcamento>()
             .HasKey(op => new { op.ProdutoId, op.OrcamentoId });
 
@@ -74,6 +79,7 @@ namespace APP_API.Data
             .HasOne(op => op.Produto)
             .WithMany(produto => produto.DetalheOrcamentos)
             .HasForeignKey(op => op.ProdutoId);
+            // FIM RELAÇÕES N PARA N
         }
 
         public DbSet<Usuario> Usuarios { get; set; } = default!;
@@ -84,6 +90,7 @@ namespace APP_API.Data
         public DbSet<Linha> Linhas { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
         public DbSet<DetalheOrcamento> DetalheOrcamento { get; set; }
+        public DbSet<DetalhePedido> DetalhePedidos { get; set; }
 
     }
 }

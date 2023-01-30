@@ -96,7 +96,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> DeletarCategoria
                 (
                     [FromServices] AppDbContext context,
-                    [FromQuery] int id
+                    [FromRoute] int id
                 )
         {
             var categoria = await context.Categorias.FindAsync(id);

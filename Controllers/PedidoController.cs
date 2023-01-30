@@ -1,30 +1,30 @@
 ﻿using APP_API.Data.Dtos.DetalheOrcamentoDto;
+using APP_API.Data.Dtos.OrcamentoDto;
 using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using APP_API.Data.Dtos.OrcamentoDto;
-using Microsoft.EntityFrameworkCore;
 
 namespace APP_API.Controllers
 {
-    [Route("orcamento")]
+    [Route("pedido")]
     [ApiController]
-    public class OrcamentoController : ControllerBase
+    public class PedidoController : ControllerBase
     {
         [HttpPost]
         [Route("criar")]
-        public async Task<IActionResult> CriarOrcamento
+        public async Task<IActionResult> CriarPedido
         ([FromServices] AppDbContext context,
          [FromServices] IMapper mapper,
-         [FromBody] CreateOrcamentoDto orcamentoDto)
+         [FromBody] CreatePedidoDto pedidoDto)
         {
-            if (orcamentoDto.ProdutosDoOrcamento is null)
+            if (pedidoDto.ProdutosDoOrcamento is null)
             {
                 return BadRequest("Um orçamento não pode ser feito, sem produtos");
             }
 
-            Orcamento orcamento = mapper.Map<Orcamento>(orcamentoDto);
+            Orcamento orcamento = mapper.Map<Orcamento>(pedidoDto);
 
             if (orcamento is null)
             {
@@ -35,7 +35,7 @@ namespace APP_API.Controllers
             await context.SaveChangesAsync();
 
 
-            foreach (var produtodoorcamento in orcamentoDto.ProdutosDoOrcamento) // gambiarra!!!
+            foreach (var produtodoorcamento in pedidoDto.ProdutosDoOrcamento) // gambiarra!!!
             {
                 var produtoid = produtodoorcamento.IdProduto;
                 var produtoquant = produtodoorcamento.Quantidade;

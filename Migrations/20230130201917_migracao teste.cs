@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace APPAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class teste : Migration
+    public partial class migracaoteste : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -139,7 +139,9 @@ namespace APPAPI.Migrations
                 name: "Pedidos",
                 columns: table => new
                 {
-                    Identificador = table.Column<string>(type: "varchar(255)", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Identificador = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EntregaOpcao = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -149,7 +151,7 @@ namespace APPAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Pedidos", x => x.Identificador);
+                    table.PrimaryKey("PK_Pedidos", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Pedidos_Usuarios_InstaladorId",
                         column: x => x.InstaladorId,
@@ -223,25 +225,25 @@ namespace APPAPI.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "PedidoProdutos",
+                name: "DetalhePedidos",
                 columns: table => new
                 {
-                    PedidosIdentificador = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    ProdutosId = table.Column<int>(type: "int", nullable: false)
+                    PedidoId = table.Column<int>(type: "int", nullable: false),
+                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    QuantProduto = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PedidoProdutos", x => new { x.PedidosIdentificador, x.ProdutosId });
+                    table.PrimaryKey("PK_DetalhePedidos", x => new { x.PedidoId, x.ProdutoId });
                     table.ForeignKey(
-                        name: "FK_PedidoProdutos_Pedidos_PedidosIdentificador",
-                        column: x => x.PedidosIdentificador,
+                        name: "FK_DetalhePedidos_Pedidos_PedidoId",
+                        column: x => x.PedidoId,
                         principalTable: "Pedidos",
-                        principalColumn: "Identificador",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PedidoProdutos_Produtos_ProdutosId",
-                        column: x => x.ProdutosId,
+                        name: "FK_DetalhePedidos_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
                         principalTable: "Produtos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -252,6 +254,11 @@ namespace APPAPI.Migrations
                 name: "IX_DetalheOrcamento_OrcamentoId",
                 table: "DetalheOrcamento",
                 column: "OrcamentoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DetalhePedidos_ProdutoId",
+                table: "DetalhePedidos",
+                column: "ProdutoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Enderecos_UsuarioId",
@@ -273,11 +280,6 @@ namespace APPAPI.Migrations
                 name: "IX_Orcamentos_InstaladorId",
                 table: "Orcamentos",
                 column: "InstaladorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PedidoProdutos_ProdutosId",
-                table: "PedidoProdutos",
-                column: "ProdutosId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pedidos_InstaladorId",
@@ -308,10 +310,10 @@ namespace APPAPI.Migrations
                 name: "DetalheOrcamento");
 
             migrationBuilder.DropTable(
-                name: "Enderecos");
+                name: "DetalhePedidos");
 
             migrationBuilder.DropTable(
-                name: "PedidoProdutos");
+                name: "Enderecos");
 
             migrationBuilder.DropTable(
                 name: "Orcamentos");

@@ -92,7 +92,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> DeletarLinha
         (
             [FromServices] AppDbContext context,
-            [FromQuery] int id
+            [FromRoute] int id
         )
         {
             var linha = await context.Linhas.FindAsync(id);

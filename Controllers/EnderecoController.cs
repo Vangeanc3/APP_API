@@ -99,7 +99,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> DeletarEndereco
         (
             [FromServices] AppDbContext context,
-            [FromQuery] int id
+            [FromRoute] int id
         )
         {
             var endereco = await context.Enderecos.FindAsync(id);

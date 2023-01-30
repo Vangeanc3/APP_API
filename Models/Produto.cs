@@ -28,7 +28,7 @@ namespace APP_API.Models
         [JsonIgnore]
         public virtual ICollection<DetalheOrcamento>? DetalheOrcamentos { get; set; }
         [JsonIgnore]
-        public virtual ICollection<Pedido>? Pedidos { get; set; }
+        public virtual ICollection<DetalhePedido>? DetalhePedidos { get; set; }
 
     }
 }
