@@ -1,9 +1,7 @@
 ﻿using APP_API.Data;
-using APP_API.Data.Dtos.CategoriaDto;
 using APP_API.Data.Dtos.EnderecoDto;
 using APP_API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

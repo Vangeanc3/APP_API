@@ -11,6 +11,5 @@ namespace APP_API.Data.Dtos.OrcamentoDto
         public double? PrecoServico { get; set; }
         public double? PrecoFinal { get; set; }
         public int? InstaladorId { get; set; } // FK do Instalador 1 - N
-        public List<ProdutoOrcamento>? ProdutosDoOrcamento { get; set; } // 
     }
 }

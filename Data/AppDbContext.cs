@@ -89,8 +89,8 @@ namespace APP_API.Data
         public DbSet<Categoria> Categorias { get; set; } = default!;
         public DbSet<Linha> Linhas { get; set; } = default!;
         public DbSet<Produto> Produtos { get; set; } = default!;
-        public DbSet<DetalheOrcamento> DetalheOrcamento { get; set; }
-        public DbSet<DetalhePedido> DetalhePedidos { get; set; }
+        public DbSet<DetalheOrcamento> DetalheOrcamento { get; set; } = default!;
+        public DbSet<DetalhePedido> DetalhePedidos { get; set; } = default!;
 
     }
 }

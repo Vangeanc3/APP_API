@@ -1,10 +1,12 @@
-﻿using APP_API.Data.Dtos.DetalheOrcamentoDto;
-using APP_API.Data.Dtos.OrcamentoDto;
+﻿using APP_API.Data.Dtos.OrcamentoDto;
 using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using APP_API.Data.Dtos.PedidoDto;
+using Microsoft.EntityFrameworkCore;
+using APP_API.Data.Dtos.DetalhePedidoDto;
 
 namespace APP_API.Controllers
 {
@@ -19,75 +21,74 @@ namespace APP_API.Controllers
          [FromServices] IMapper mapper,
          [FromBody] CreatePedidoDto pedidoDto)
         {
-            if (pedidoDto.ProdutosDoOrcamento is null)
+            if (pedidoDto.ProdutosDoPedido is null)
             {
-                return BadRequest("Um orçamento não pode ser feito, sem produtos");
+                return BadRequest("Um pedido não pode ser feito, sem produtos");
             }
 
-            Orcamento orcamento = mapper.Map<Orcamento>(pedidoDto);
+            Pedido pedido = mapper.Map<Pedido>(pedidoDto);
 
-            if (orcamento is null)
+            if (pedido is null)
             {
                 return BadRequest();
             }
 
-            await context.Orcamentos.AddAsync(orcamento);
+            await context.Pedidos.AddAsync(pedido);
             await context.SaveChangesAsync();
 
 
-            foreach (var produtodoorcamento in pedidoDto.ProdutosDoOrcamento) // gambiarra!!!
+            foreach (var produtosPedido in pedidoDto.ProdutosDoPedido) // gambiarra!!!
             {
-                var produtoid = produtodoorcamento.IdProduto;
-                var produtoquant = produtodoorcamento.Quantidade;
-                var detalheorcamentorequisicao = new DetalheOrcamento
+                var produtoid = produtosPedido.ProdutoId;
+                var produtoquant = produtosPedido.QuantProduto;
+                var detalheProdutoRequisicao = new DetalheOrcamento
                 {
-                    OrcamentoId = orcamento.Id,
+                    OrcamentoId = pedido.Id,
                     ProdutoId = produtoid,
                     QuantProdutos = produtoquant
                 };
 
-                await context.DetalheOrcamento.AddAsync(detalheorcamentorequisicao);
+                await context.DetalheOrcamento.AddAsync(detalheProdutoRequisicao);
             }
 
 
             await context.SaveChangesAsync();
-            return Ok(orcamento);
+            return Ok(pedido);
         }
 
 
         [HttpPut]
         [Route("atualizar/{id}")]
-        public async Task<IActionResult> AtualizarOrcamento
+        public async Task<IActionResult> AtualizarPedido
             (
                 [FromServices] AppDbContext context,
                 [FromServices] IMapper mapper,
                 [FromRoute] int id,
-                [FromBody] PutOrcamentoDto orcamentoDto
+                [FromBody] PutPedidoDto pedidoDto
             )
         {
-            Orcamento orcamento = mapper.Map<Orcamento>(orcamentoDto);
+            Pedido pedido = mapper.Map<Pedido>(pedidoDto);
 
-            if (orcamento == null)
+            if (pedido == null)
             {
                 return BadRequest();
             }
 
-            var existeOrcamento = await context.Orcamentos.FindAsync(id);
+            var existePedido = await context.Pedidos.FindAsync(id);
 
-            if (existeOrcamento is null)
+            if (existePedido is null)
             {
-                return NotFound("O orcamento não existe");
+                return NotFound("O pedido não existe");
             }
 
+            existePedido.EntregaOpcao = pedido.EntregaOpcao != null ? pedido.EntregaOpcao : existePedido.EntregaOpcao;
+            existePedido.FormaDePagamento = pedido.FormaDePagamento != null ? pedido.FormaDePagamento : existePedido.FormaDePagamento;
+            existePedido.Preco = pedido.Preco != null ? pedido.Preco : existePedido.Preco;
+            existePedido.InstaladorId = pedido.InstaladorId != null ? pedido.InstaladorId : existePedido.InstaladorId;
+            existePedido.DetalhePedidos = pedido.DetalhePedidos != null ? pedido.DetalhePedidos : existePedido.DetalhePedidos;
+            
 
-            existeOrcamento.NomeCliente = orcamento.NomeCliente != null ? orcamento.NomeCliente : existeOrcamento.NomeCliente;
-            existeOrcamento.DescricaoServico = orcamento.DescricaoServico != null ? orcamento.DescricaoServico : existeOrcamento.DescricaoServico;
-            existeOrcamento.PrecoServico = orcamento.PrecoServico != null ? orcamento.PrecoServico : existeOrcamento.PrecoServico;
-            existeOrcamento.PrecoFinal = orcamento.PrecoFinal != null ? orcamento.PrecoFinal : existeOrcamento.PrecoFinal;
-            existeOrcamento.InstaladorId = orcamento.InstaladorId != null ? orcamento.InstaladorId : existeOrcamento.InstaladorId;
-            existeOrcamento.DetalhesOrcamentos = orcamento.DetalhesOrcamentos != null ? orcamento.DetalhesOrcamentos : existeOrcamento.DetalhesOrcamentos;
-
-            context.Orcamentos.Update(existeOrcamento);
+            context.Pedidos.Update(existePedido);
             await context.SaveChangesAsync();
 
             return NoContent();
@@ -95,7 +96,7 @@ namespace APP_API.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> BuscarOrcamentoPorId
+        public async Task<IActionResult> BuscarPedidoPorId
             (
                 [FromServices] AppDbContext context,
                 [FromServices] IMapper mapper,
@@ -105,48 +106,48 @@ namespace APP_API.Controllers
         {
             if (id.HasValue)
             {
-                var orcamento = await context.Orcamentos.FirstOrDefaultAsync(orcamento => orcamento.Id == id);
+                var pedido = await context.Pedidos.FirstOrDefaultAsync(pedido => pedido.Id == id);
 
-                ReadOrcamentoDto orcamentoDto = mapper.Map<ReadOrcamentoDto>(orcamento);
+                ReadPedidoDto pedidoDto = mapper.Map<ReadPedidoDto>(pedido);
 
-                if (orcamentoDto is null)
+                if (pedidoDto is null)
                 {
-                    return NotFound("Orçamento não existe");
+                    return NotFound("O Pedido não existe");
                 }
 
                 return Ok
                     (
                         new
                         {
-                            orcamentoDto.Id,
-                            orcamentoDto.IdentificadorUnico,
-                            orcamentoDto.NomeCliente,
-                            orcamentoDto.DescricaoServico,
-                            orcamentoDto.PrecoServico,
-                            orcamentoDto.PrecoFinal,
-                            instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
-                            produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
+                            pedidoDto.Id,
+                            pedidoDto.Identificador,
+                            pedidoDto.DetalhePedidos,
+                            pedidoDto.EntregaOpcao,
+                            pedidoDto.FormaDePagamento,
+                            pedidoDto.Preco,
+                            instalador = new { pedidoDto.Instalador.Nome, pedidoDto.Instalador.Email },
+                            produtosDto = mapper.Map<List<ReadDetalhePedidoDto>>(pedidoDto.DetalhePedidos)
                         }
                     );
             }
-            return BadRequest("Orçamento não existe");
+            return BadRequest("O pedido não existe");
         }
 
         [HttpDelete]
         [Route("deletar/{id}")]
-        public async Task<IActionResult> DeletarOrcamento
+        public async Task<IActionResult> DeletarPedido
        (
            [FromServices] AppDbContext context,
            [FromRoute] int id
        )
         {
-            var orcamento = await context.Orcamentos.FindAsync(id);
-            if (orcamento is null)
+            var pedido = await context.Pedidos.FindAsync(id);
+            if (pedido is null)
             {
                 return NotFound();
             }
 
-            context.Orcamentos.Remove(orcamento);
+            context.Pedidos.Remove(pedido);
             await context.SaveChangesAsync();
 
             return Ok();
