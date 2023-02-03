@@ -11,7 +11,6 @@ namespace APP_API.Models
     {
         [Key]
         [Required]
-        [JsonIgnore]
         public int Id { get; set; }
         public string IdentificadorUnico { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
@@ -20,7 +19,6 @@ namespace APP_API.Models
         public double PrecoFinal { get; set; }
         public int InstaladorId { get; set; } // FK do Instalador 1 - N
         public virtual Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
-        [JsonIgnore]
         public virtual ICollection<DetalheOrcamento> DetalhesOrcamentos { get; set; } // Produtos do orcamento
     }
 }

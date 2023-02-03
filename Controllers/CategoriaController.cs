@@ -67,7 +67,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> BuscarCategorias([FromServices] AppDbContext context, [FromServices] IMapper mapper)
         {
             List<Categoria> categorias = await context.Categorias.ToListAsync();
-            List<ReadLinhaDto> categoriaDto = mapper.Map<List<ReadLinhaDto>>(categorias);
+            List<ReadCategoriaDto> categoriaDto = mapper.Map<List<ReadCategoriaDto>>(categorias);
 
             return Ok(categoriaDto);
         }
@@ -86,7 +86,7 @@ namespace APP_API.Controllers
             if (categoria is null)
                 BadRequest();
 
-            ReadLinhaDto categoriaDto = mapper.Map<ReadLinhaDto>(categoria);
+            ReadCategoriaDto categoriaDto = mapper.Map<ReadCategoriaDto>(categoria);
 
             return Ok(categoriaDto);
         }

@@ -7,7 +7,6 @@ namespace APP_API.Data.Dtos.OrcamentoDto
 {
     public class CreateOrcamentoDto
     {
-        public string IdentificadorUnico { get; set; }
         public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
         public string DescricaoServico { get; set; }
         public double PrecoServico { get; set; }

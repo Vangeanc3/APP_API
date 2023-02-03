@@ -19,11 +19,8 @@ namespace APP_API.Models
         public Role Role { get; set; } // Profissao
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;
-        [JsonIgnore]
         public virtual List<Endereco>? Enderecos { get; set; } // Endereços e pode ser null
-        [JsonIgnore]
         public virtual List<Orcamento>? Orcamentos { get; set; } // O Usuario pode criar um orcamento
-        [JsonIgnore]
         public virtual List<Pedido>? Pedidos { get; set; } // O Usuario Instalador pode fazer um pedido
     }
 

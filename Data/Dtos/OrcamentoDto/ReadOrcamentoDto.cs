@@ -1,6 +1,4 @@
 ﻿using APP_API.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace APP_API.Data.Dtos.OrcamentoDto
 {
@@ -12,7 +10,7 @@ namespace APP_API.Data.Dtos.OrcamentoDto
         public string DescricaoServico { get; set; }
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
-        public virtual Usuario Instalador { get; set; } // Instalador que vai fazer o orcamento
-        public virtual ICollection<DetalheOrcamento> DetalhesOrcamentos { get; set; } // Produtos do orcamento
+        public object Instalador { get; set; } // Instalador que vai fazer o orcamento
+        public object DetalhesOrcamentos { get; set; } // Produtos do orcamento
     }
 }

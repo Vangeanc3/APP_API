@@ -1,12 +1,10 @@
-﻿using APP_API.Data.Dtos.OrcamentoDto;
-using APP_API.Data;
+﻿using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using APP_API.Data.Dtos.PedidoDto;
 using Microsoft.EntityFrameworkCore;
-using APP_API.Data.Dtos.DetalhePedidoDto;
+using APP_API.Interfaces;
 
 namespace APP_API.Controllers
 {
@@ -18,6 +16,7 @@ namespace APP_API.Controllers
         [Route("criar")]
         public async Task<IActionResult> CriarPedido
         ([FromServices] AppDbContext context,
+         [FromServices] IGerarIdentificadorService geraId,
          [FromServices] IMapper mapper,
          [FromBody] CreatePedidoDto pedidoDto)
         {
@@ -33,6 +32,9 @@ namespace APP_API.Controllers
                 return BadRequest();
             }
 
+            var identificador = geraId.GerarIdentificador();
+            pedido.Identificador = identificador;
+                
             await context.Pedidos.AddAsync(pedido);
             await context.SaveChangesAsync();
 
@@ -53,7 +55,7 @@ namespace APP_API.Controllers
 
 
             await context.SaveChangesAsync();
-            return Ok(pedido);
+            return Ok(pedidoDto);
         }
 
 
@@ -115,20 +117,7 @@ namespace APP_API.Controllers
                     return NotFound("O Pedido não existe");
                 }
 
-                return Ok
-                    (
-                        new
-                        {
-                            pedidoDto.Id,
-                            pedidoDto.Identificador,
-                            pedidoDto.DetalhePedidos,
-                            pedidoDto.EntregaOpcao,
-                            pedidoDto.FormaDePagamento,
-                            pedidoDto.Preco,
-                            instalador = new { pedidoDto.Instalador.Nome, pedidoDto.Instalador.Email },
-                            produtosDto = mapper.Map<List<ReadDetalhePedidoDto>>(pedidoDto.DetalhePedidos)
-                        }
-                    );
+                return Ok(pedidoDto);
             }
             return BadRequest("O pedido não existe");
         }

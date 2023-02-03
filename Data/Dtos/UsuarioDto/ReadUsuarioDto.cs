@@ -12,6 +12,6 @@ namespace APP_API.Data.Dtos.UsuarioDto
         public Role Role { get; set; } // Profissao
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;
-        public virtual List<Endereco>? Enderecos { get; set; } // Endereços e pode ser null
+        public object Enderecos { get; set; } // Endereços e pode ser null
     }
 }

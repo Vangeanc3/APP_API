@@ -6,7 +6,6 @@ namespace APP_API.Data.Dtos.PedidoDto
 {
     public class CreatePedidoDto
     {
-        public string Identificador { get; set; } // FK
         public string EntregaOpcao { get; set; } // Definir depois!!!
         public FormaDePagamento FormaDePagamento { get; set; } // Select
         public double Preco { get; set; }

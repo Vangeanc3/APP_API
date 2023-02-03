@@ -1,10 +1,10 @@
-﻿using APP_API.Data.Dtos.DetalheOrcamentoDto;
-using APP_API.Data;
+﻿using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using APP_API.Data.Dtos.OrcamentoDto;
 using Microsoft.EntityFrameworkCore;
+using APP_API.Interfaces;
 
 namespace APP_API.Controllers
 {
@@ -17,6 +17,7 @@ namespace APP_API.Controllers
         public async Task<IActionResult> CriarOrcamento
         ([FromServices] AppDbContext context,
          [FromServices] IMapper mapper,
+         [FromServices] IGerarIdentificadorService geraId,
          [FromBody] CreateOrcamentoDto orcamentoDto)
         {
             if (orcamentoDto.ProdutosDoOrcamento is null)
@@ -30,7 +31,9 @@ namespace APP_API.Controllers
             {
                 return BadRequest();
             }
-
+            var identificador = geraId.GerarIdentificador();
+            orcamento.IdentificadorUnico = identificador;
+            
             await context.Orcamentos.AddAsync(orcamento);
             await context.SaveChangesAsync();
 
@@ -51,7 +54,7 @@ namespace APP_API.Controllers
 
 
             await context.SaveChangesAsync();
-            return Ok(orcamento);
+            return Ok(orcamentoDto);
         }
 
 
@@ -114,20 +117,7 @@ namespace APP_API.Controllers
                     return NotFound("Orçamento não existe");
                 }
 
-                return Ok
-                    (
-                        new
-                        {
-                            orcamentoDto.Id,
-                            orcamentoDto.IdentificadorUnico,
-                            orcamentoDto.NomeCliente,
-                            orcamentoDto.DescricaoServico,
-                            orcamentoDto.PrecoServico,
-                            orcamentoDto.PrecoFinal,
-                            instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
-                            produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
-                        }
-                    );
+                return Ok(orcamentoDto);
             }
             return BadRequest("Orçamento não existe");
         }

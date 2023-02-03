@@ -31,52 +31,6 @@ namespace APP_API.Controllers
             return Ok(usuario);
         }
 
-
-
-
-
-
-        [HttpGet("random")]
-        public string GerarIdentificador()
-        {
-            var random = new Random();
-            int ano = DateTime.Now.Year;
-            int mes = DateTime.Now.Month;
-            int numeroRandom = random.Next(1000, 9999);
-            
-             return $"{ano}{mes:D2}{numeroRandom:D4}";
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        [HttpGet]
-        [Route("anonima")]
-        [AllowAnonymous]
-        public string Anonimo() => "Anônimo";
-
-        [HttpGet]
-        [Route("autenticado")]
-        [Authorize]
-        public string Autenticado() => $"Autenticado - {User.Identity.Name}";
-
-        [HttpGet]
-        [Route("instalador")]
-        [Authorize(Roles = "Instalador")]
-        public string Instalador() => $"Instalador";
-
         [HttpGet]
         [Route("vendedor")]
         [Authorize(Roles = "Vendedor")]

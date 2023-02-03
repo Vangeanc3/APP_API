@@ -34,18 +34,5 @@ namespace APP_API.Controllers
             await context.SaveChangesAsync();
             return Ok(user);
         }
-
-        [HttpGet]
-        [Route("teste")]
-        [Authorize(Roles = "Administrador")]
-        public string Administrador() => $"Administrador";
-
-        [HttpGet]
-        [Route("teste2")]
-        public IActionResult teste([FromBody] Usuario usuario)
-        {
-            var role = usuario.Role;
-            return Ok(role.ToString());
-        }
     }
 }

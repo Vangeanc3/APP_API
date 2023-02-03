@@ -12,6 +12,6 @@ namespace APP_API.Data.Dtos.EnderecoDto
         public int Numero { get; set; }
         public string Bloco { get; set; }
         public string Apartamento { get; set; }
-        public virtual Usuario? Usuario { get; set; } // Dono do endereco
+        public object Usuario { get; set; } // Dono do endereco
     }
 }

@@ -14,7 +14,12 @@ namespace APP_API.Profiles
         {
             CreateMap<CreateOrcamentoDto, Orcamento>();
             CreateMap<PutOrcamentoDto, Orcamento>();
-            CreateMap<Orcamento, ReadOrcamentoDto>();
+            CreateMap<Orcamento, ReadOrcamentoDto>()
+                .ForMember(o => o.Instalador, opts => opts
+                .MapFrom(o => new { o.Instalador.Nome, o.Instalador.Email }))
+                .ForMember(o => o.DetalhesOrcamentos, opts => opts
+                .MapFrom(o => o.DetalhesOrcamentos
+                .Select(de => new { de.Produto.Nome, de.QuantProdutos })));
         }
     }
 }

@@ -11,7 +11,9 @@ namespace APP_API.Profiles
         {
             CreateMap<CreateEnderecoDto, Endereco>();
             CreateMap<PutEnderecoDto, Endereco>();
-            CreateMap<Endereco, ReadEnderecoDto>();
+            CreateMap<Endereco, ReadEnderecoDto>()
+                .ForMember(e => e.Usuario, opts => opts
+                .MapFrom(e => new { e.Usuario.Nome, e.Usuario.Role, e.Usuario.Email }));
         }
     }
 }
