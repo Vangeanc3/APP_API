@@ -60,7 +60,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarLinhas([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        [Route("buscar")]
+        public async Task<IActionResult> BuscarLinhas
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper
+        )
         {
             List<Linha> linhas = await context.Linhas.ToListAsync();
             List<ReadLinhaDto> linhasDto = mapper.Map<List<ReadLinhaDto>>(linhas);
@@ -69,7 +74,7 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarLinhaPorId
         (
             [FromServices] AppDbContext context,

@@ -15,13 +15,13 @@ namespace APP_API.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpGet]
-        [Route("{skip?}/{take?}")]
+        [Route("buscar")] // buscar?skip=0&take=50
         public async Task<ActionResult> RetornarUsuarios
             (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] int skip = 0,
-            [FromRoute] int take = 100
+            [FromQuery] int skip = 0,
+            [FromQuery] int take = 100
             )
         {
             var total = await context.Usuarios.CountAsync();
@@ -46,17 +46,18 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{usuarioemail}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> RetornaUsuario
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute][EmailAddress] string usuarioemail
+            [FromQuery] string email,
+            [FromQuery] int id
         )
         {
             var usuario = await context
             .Usuarios
-            .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower());
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() || u.Id == id);
 
             if (usuario is null)
             {

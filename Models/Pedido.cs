@@ -11,8 +11,8 @@ namespace APP_API.Models
         [Key]
         [Required]
         public int Id { get; set; }
-        public string Identificador { get; set; } // FK
-        public string EntregaOpcao { get; set; } // Definir depois!!!
+        public string Identificador { get; set; } = null!; // FK
+        public string EntregaOpcao { get; set; } = null!; // Definir depois!!!
         public FormaDePagamento FormaDePagamento { get; set; } // Select
         public double Preco { get; set; }
         public int InstaladorId { get; set; } // FK Instalador

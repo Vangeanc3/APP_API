@@ -12,9 +12,9 @@ namespace APP_API.Models
         [Key]
         [Required]
         public int Id { get; set; }
-        public string IdentificadorUnico { get; set; }
-        public string NomeCliente { get; set; } // Nome do Cliente que fez o Orcamento
-        public string DescricaoServico { get; set; }
+        public string IdentificadorUnico { get; set; } = null!;
+        public string NomeCliente { get; set; } = null!;// Nome do Cliente que fez o Orcamento
+        public string DescricaoServico { get; set; } = null!;
         public double PrecoServico { get; set; }
         public double PrecoFinal { get; set; }
         public int InstaladorId { get; set; } // FK do Instalador 1 - N

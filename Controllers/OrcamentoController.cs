@@ -15,10 +15,11 @@ namespace APP_API.Controllers
         [HttpPost]
         [Route("criar")]
         public async Task<IActionResult> CriarOrcamento
-        ([FromServices] AppDbContext context,
-         [FromServices] IMapper mapper,
-         [FromServices] IGerarIdentificadorService geraId,
-         [FromBody] CreateOrcamentoDto orcamentoDto)
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
+            [FromServices] IGerarIdentificadorService geraId,
+            [FromBody] CreateOrcamentoDto orcamentoDto)
         {
             if (orcamentoDto.ProdutosDoOrcamento is null)
             {
@@ -33,7 +34,7 @@ namespace APP_API.Controllers
             }
             var identificador = geraId.GerarIdentificador();
             orcamento.IdentificadorUnico = identificador;
-            
+
             await context.Orcamentos.AddAsync(orcamento);
             await context.SaveChangesAsync();
 

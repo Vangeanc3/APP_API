@@ -1,10 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace APP_API.Models
 {
@@ -12,10 +6,10 @@ namespace APP_API.Models
     public class Usuario
     {
         public int Id { get; set; } // PK
-        public string Nome { get; set; }
-        public string Telefone { get; set; }
-        public string Email { get; set; } // Unica 
-        public string Senha { get; set; }
+        public string Nome { get; set; } = null!;
+        public string Telefone { get; set; }  = null!;
+        public string Email { get; set; } = null!;// Unica 
+        public string Senha { get; set; } = null!;
         public Role Role { get; set; } // Profissao
         public string? Cpf { get; set; }  // Pode ser null
         public bool Status { get; set; } = true;

@@ -65,7 +65,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarEndereco([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        [Route("buscar")]
+        public async Task<IActionResult> BuscarEndereco
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper
+        )
         {
             List<Endereco> enderecos = await context.Enderecos.ToListAsync();
             List<ReadEnderecoDto> enderecoDtos = mapper.Map<List<ReadEnderecoDto>>(enderecos);
@@ -74,12 +79,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarEnderecoPorId
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] int id
+            [FromQuery] int id
         )
         {
             var endereco = await context.Enderecos.FirstOrDefaultAsync(e => e.Id == id);

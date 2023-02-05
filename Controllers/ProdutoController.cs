@@ -72,7 +72,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarProdutos([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        [Route("buscar")]
+        public async Task<IActionResult> BuscarProdutos
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper
+        )
         {
             List<Produto> produtos = await context.Produtos.ToListAsync();
             List<ReadProdutoDto> produtosDto = mapper.Map<List<ReadProdutoDto>>(produtos);
@@ -81,12 +86,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarProdutoPorId
       (
           [FromServices] AppDbContext context,
           [FromServices] IMapper mapper,
-          [FromRoute] int id
+          [FromQuery] int id
       )
         {
             var produtos = await context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
