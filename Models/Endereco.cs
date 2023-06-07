@@ -14,6 +14,6 @@ namespace APP_API.Models
         public string Bloco { get; set; } = null!;
         public string Apartamento { get; set; } = null!;
         public int  UsuarioId { get; set; }
-        public virtual Usuario Usuario { get; set; }
+        public virtual Usuario Usuario { get; set; } = null!;
     }
 }

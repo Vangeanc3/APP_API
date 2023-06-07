@@ -16,7 +16,7 @@ namespace APP_API.Models
         public string LinkPdfManual { get; set; } = null!;
         [Required(ErrorMessage = "Produto tem que ter uma categoria")]
         public int CategoriaId { get; set; }
-        public virtual Categoria Categoria { get; set; }
+        public virtual Categoria Categoria { get; set; } = null!;
         public int? LinhaId { get; set; } // FK Linha pode ser null
         public virtual Linha? Linha { get; set; } // LINHA
         public virtual ICollection<DetalheOrcamento>? DetalheOrcamentos { get; set; }

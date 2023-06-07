@@ -6,7 +6,6 @@ using APP_API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data.Dtos.UsuarioDto;
 using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 
 namespace APP_API.Controllers
 {

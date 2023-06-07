@@ -53,7 +53,7 @@ namespace APP_API.Data
                 .HasForeignKey(produto => produto.LinhaId);
 
 
-            // RELAÇÕES N PARA N
+            // INICIO RELAÇÕES N PARA N
             builder.Entity<DetalhePedido>()
                 .HasKey(dp => new { dp.PedidoId, dp.ProdutoId });
 

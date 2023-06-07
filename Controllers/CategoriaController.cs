@@ -2,6 +2,7 @@
 using APP_API.Data.Dtos.CategoriaDto;
 using APP_API.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ namespace APP_API.Controllers
     {
         [HttpPost]
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> CriarCategoria
         (
                 [FromServices] AppDbContext context,
