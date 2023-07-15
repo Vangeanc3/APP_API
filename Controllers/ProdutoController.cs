@@ -36,10 +36,48 @@ namespace APP_API.Controllers
             return Ok(produto);
         }
 
+        [HttpPut]
+        [Route("atualizar/{id}")]
+        public async Task<IActionResult> AtualizarLinha
+              (
+                  [FromServices] AppDbContext context,
+                  [FromServices] IMapper mapper,
+                  [FromRoute] int id,
+                  [FromBody] PutProdutoDto putProdutoDto
+              )
+        {
+            Produto produto = mapper.Map<Produto>(putProdutoDto);
 
+            var existeProduto = await context.Produtos.FindAsync(id);
+
+            if (existeProduto is null)
+            {
+                return NotFound("Produto não existe");
+            }
+
+            existeProduto.Nome = produto.Nome != null ? produto.Nome : existeProduto.Nome;
+            existeProduto.Descricao = produto.Descricao != null ? produto.Descricao : existeProduto.Descricao;
+            existeProduto.QuantEstoque = produto.QuantEstoque != null ? produto.QuantEstoque : existeProduto.QuantEstoque;
+            existeProduto.PrecoCliente = produto.PrecoCliente != null ? produto.PrecoCliente : existeProduto.PrecoCliente;
+            existeProduto.PrecoParceiro = produto.PrecoParceiro != null ? produto.PrecoParceiro : existeProduto.PrecoParceiro;
+            existeProduto.LinkImg = produto.LinkImg != null ? produto.LinkImg : existeProduto.LinkImg;
+            existeProduto.LinkPdfManual = produto.LinkPdfManual != null ? produto.LinkPdfManual : existeProduto.LinkPdfManual;
+            existeProduto.CategoriaId = produto.CategoriaId != null ? produto.CategoriaId : existeProduto.CategoriaId;
+            existeProduto.LinhaId = produto.LinhaId != null ? produto.LinhaId : existeProduto.LinhaId;
+
+            context.Produtos.Update(existeProduto);
+            await context.SaveChangesAsync();
+
+            return NoContent();
+        }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarProdutos([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        [Route("buscar")]
+        public async Task<IActionResult> BuscarProdutos
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper
+        )
         {
             List<Produto> produtos = await context.Produtos.ToListAsync();
             List<ReadProdutoDto> produtosDto = mapper.Map<List<ReadProdutoDto>>(produtos);
@@ -48,12 +86,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarProdutoPorId
       (
           [FromServices] AppDbContext context,
           [FromServices] IMapper mapper,
-          [FromRoute] int id
+          [FromQuery] int id
       )
         {
             var produtos = await context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
@@ -66,6 +104,25 @@ namespace APP_API.Controllers
             return Ok(readProdutosDto);
         }
 
+         [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarProduto
+        (
+            [FromServices] AppDbContext context,
+            [FromRoute] int id
+        )
+        {
+            var produto = await context.Produtos.FindAsync(id);
+            if (produto is null)
+            {
+                return NotFound();
+            }
+
+            context.Produtos.Remove(produto);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
 
     }
 }

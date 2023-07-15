@@ -10,7 +10,10 @@ namespace APP_API.Profiles
         {
             CreateMap<CreateCategoriaDto, Categoria>();
             CreateMap<PutCategoriaDto, Categoria>();
-            CreateMap<Categoria, ReadLinhaDto>();
+            CreateMap<Categoria, ReadCategoriaDto>()
+                .ForMember(categoria => categoria.Linhas, opts => opts
+                .MapFrom(categoria => categoria.Linhas
+                .Select(linha => new { linha.Id, linha.Nome })));
         }
     }
 }

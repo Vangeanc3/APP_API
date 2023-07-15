@@ -10,20 +10,21 @@ namespace APP_API.Models
     {
         [Key]
         [Required]
-        public string Identificador { get; set; } // FK
-        public string EntregaOpcao { get; set; } // Definir depois!!!
+        public int Id { get; set; }
+        public string Identificador { get; set; } = null!; // FK
+        public string EntregaOpcao { get; set; } = null!; // Definir depois!!!
         public FormaDePagamento FormaDePagamento { get; set; } // Select
         public double Preco { get; set; }
         public int InstaladorId { get; set; } // FK Instalador
-        public virtual Usuario Instalador { get; set; } // Pode ter como origem opcao1
-        public virtual ICollection<Produto>? Produtos { get; set; } // Lista de produtos
+        public virtual Usuario Instalador { get; set; } = null!; // Pode ter como origem opcao1
+        public virtual ICollection<DetalhePedido> DetalhePedidos { get; set; } = null!; // Lista de produtos
 
     }
 
     public enum FormaDePagamento
     {
-        CartaoCredito,
-        CartooDebito,
-        Dinheiro
+        CartaoCredito = 1,
+        CartooDebito = 2,
+        Dinheiro = 3
     }
 }

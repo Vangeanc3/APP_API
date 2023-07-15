@@ -1,9 +1,10 @@
-﻿using APP_API.Data.Dtos.DetalheOrcamentoDto;
-using APP_API.Data;
+﻿using APP_API.Data;
 using APP_API.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using APP_API.Data.Dtos.OrcamentoDto;
+using Microsoft.EntityFrameworkCore;
+using APP_API.Interfaces;
 
 namespace APP_API.Controllers
 {
@@ -14,9 +15,11 @@ namespace APP_API.Controllers
         [HttpPost]
         [Route("criar")]
         public async Task<IActionResult> CriarOrcamento
-        ([FromServices] AppDbContext context,
-         [FromServices] IMapper mapper,
-         [FromBody] CreateOrcamentoDto orcamentoDto)
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper,
+            [FromServices] IGerarIdentificadorService geraId,
+            [FromBody] CreateOrcamentoDto orcamentoDto)
         {
             if (orcamentoDto.ProdutosDoOrcamento is null)
             {
@@ -29,6 +32,8 @@ namespace APP_API.Controllers
             {
                 return BadRequest();
             }
+            var identificador = geraId.GerarIdentificador();
+            orcamento.IdentificadorUnico = identificador;
 
             await context.Orcamentos.AddAsync(orcamento);
             await context.SaveChangesAsync();
@@ -50,7 +55,46 @@ namespace APP_API.Controllers
 
 
             await context.SaveChangesAsync();
-            return Ok(orcamento);
+            return Ok(orcamentoDto);
+        }
+
+
+        [HttpPut]
+        [Route("atualizar/{id}")]
+        public async Task<IActionResult> AtualizarOrcamento
+            (
+                [FromServices] AppDbContext context,
+                [FromServices] IMapper mapper,
+                [FromRoute] int id,
+                [FromBody] PutOrcamentoDto orcamentoDto
+            )
+        {
+            Orcamento orcamento = mapper.Map<Orcamento>(orcamentoDto);
+
+            if (orcamento == null)
+            {
+                return BadRequest();
+            }
+
+            var existeOrcamento = await context.Orcamentos.FindAsync(id);
+
+            if (existeOrcamento is null)
+            {
+                return NotFound("O orcamento não existe");
+            }
+
+
+            existeOrcamento.NomeCliente = orcamento.NomeCliente != null ? orcamento.NomeCliente : existeOrcamento.NomeCliente;
+            existeOrcamento.DescricaoServico = orcamento.DescricaoServico != null ? orcamento.DescricaoServico : existeOrcamento.DescricaoServico;
+            existeOrcamento.PrecoServico = orcamento.PrecoServico != null ? orcamento.PrecoServico : existeOrcamento.PrecoServico;
+            existeOrcamento.PrecoFinal = orcamento.PrecoFinal != null ? orcamento.PrecoFinal : existeOrcamento.PrecoFinal;
+            existeOrcamento.InstaladorId = orcamento.InstaladorId != null ? orcamento.InstaladorId : existeOrcamento.InstaladorId;
+            existeOrcamento.DetalhesOrcamentos = orcamento.DetalhesOrcamentos != null ? orcamento.DetalhesOrcamentos : existeOrcamento.DetalhesOrcamentos;
+
+            context.Orcamentos.Update(existeOrcamento);
+            await context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         [HttpGet]
@@ -65,7 +109,7 @@ namespace APP_API.Controllers
         {
             if (id.HasValue)
             {
-                var orcamento = context.Orcamentos.FirstOrDefault(orcamento => orcamento.Id == id);
+                var orcamento = await context.Orcamentos.FirstOrDefaultAsync(orcamento => orcamento.Id == id);
 
                 ReadOrcamentoDto orcamentoDto = mapper.Map<ReadOrcamentoDto>(orcamento);
 
@@ -74,22 +118,29 @@ namespace APP_API.Controllers
                     return NotFound("Orçamento não existe");
                 }
 
-                return Ok
-                    (
-                        new
-                        {
-                            orcamentoDto.Id,
-                            orcamentoDto.IdentificadorUnico,
-                            orcamentoDto.NomeCliente,
-                            orcamentoDto.DescricaoServico,
-                            orcamentoDto.PrecoServico,
-                            orcamentoDto.PrecoFinal,
-                            instalador = new { orcamentoDto.Instalador.Nome, orcamentoDto.Instalador.Email },
-                            produtosDto = mapper.Map<List<ReadDetalheOrcamentoDto>>(orcamentoDto.DetalhesOrcamentos)
-                        }
-                    );
+                return Ok(orcamentoDto);
             }
             return BadRequest("Orçamento não existe");
+        }
+
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarOrcamento
+       (
+           [FromServices] AppDbContext context,
+           [FromRoute] int id
+       )
+        {
+            var orcamento = await context.Orcamentos.FindAsync(id);
+            if (orcamento is null)
+            {
+                return NotFound();
+            }
+
+            context.Orcamentos.Remove(orcamento);
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }

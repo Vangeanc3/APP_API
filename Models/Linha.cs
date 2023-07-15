@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace APP_API.Models
 {
@@ -8,12 +6,10 @@ namespace APP_API.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Nome { get; set; }
+        public string Nome { get; set; } = null!;
         public int CategoriaId { get; set; }
-        [JsonIgnore]
-        public virtual Categoria Categoria { get; set; }
-        [JsonIgnore]
-        public virtual List<Produto> Produtos { get; set; }
+        public virtual Categoria Categoria { get; set; } = null!;
+        public virtual List<Produto> Produtos { get; set; } = null!;
 
     }
 }

@@ -9,7 +9,11 @@ namespace APP_API.Profiles
         public ProdutoProfile()
         {
             CreateMap<CreateProdutoDto, Produto>();
-            CreateMap<Produto, ReadProdutoDto>();
+            CreateMap<Produto, ReadProdutoDto>()
+                .ForMember(p => p.Categoria, opts => opts
+                .MapFrom(p => p.Categoria.Nome ))
+                .ForMember(p => p.Linha, opts => opts
+                .MapFrom(p => p.Linha.Nome));
         }
     }
 }

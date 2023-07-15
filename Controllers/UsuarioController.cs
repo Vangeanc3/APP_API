@@ -2,13 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using APP_API.Models;
 using APP_API.Data;
 using Microsoft.EntityFrameworkCore;
-using APP_API.Settings;
 using APP_API.Interfaces;
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.AspNetCore.Authorization;
 using APP_API.Data.Dtos.UsuarioDto;
 using AutoMapper;
-using System.ComponentModel.DataAnnotations;
 
 namespace APP_API.Controllers
 {
@@ -17,13 +14,13 @@ namespace APP_API.Controllers
     public class UsuarioController : ControllerBase
     {
         [HttpGet]
-        [Route("{skip}/{take}")]
+        [Route("buscar")] // buscar?skip=0&take=50
         public async Task<ActionResult> RetornarUsuarios
             (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] int skip = 0,
-            [FromRoute] int take = 100
+            [FromQuery] int skip = 0,
+            [FromQuery] int take = 100
             )
         {
             var total = await context.Usuarios.CountAsync();
@@ -48,21 +45,22 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{usuarioemail}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> RetornaUsuario
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] [EmailAddress] string usuarioemail
+            [FromQuery] string email,
+            [FromQuery] int id
         )
         {
             var usuario = await context
             .Usuarios
-            .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioemail.ToLower());
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower() || u.Id == id);
 
             if (usuario is null)
             {
-                return NotFound("Usuario não encontrado");
+                return NotFound("Usuario nï¿½o encontrado");
             }
 
             ReadUsuarioDto usuarioDto = mapper.Map<ReadUsuarioDto>(usuario);
@@ -91,15 +89,15 @@ namespace APP_API.Controllers
 
             if (existeUsuario is null)
             {
-                return NotFound("O usuario não existe");
+                return NotFound("O usuario nï¿½o existe");
             }
 
 
-            existeUsuario.Nome =             usuario.Nome != null ? usuario.Nome     : existeUsuario.Nome;
-            existeUsuario.Telefone =     usuario.Telefone != null ? usuario.Telefone : existeUsuario.Telefone;
-            existeUsuario.Cpf =               usuario.Cpf != null ? usuario.Cpf      : existeUsuario.Cpf;
-            existeUsuario.Email =           usuario.Email != null ? usuario.Email    : existeUsuario.Email;
-            existeUsuario.Senha =           usuario.Senha != null ? usuario.Senha    : existeUsuario.Senha;
+            existeUsuario.Nome = usuario.Nome != null ? usuario.Nome : existeUsuario.Nome;
+            existeUsuario.Telefone = usuario.Telefone != null ? usuario.Telefone : existeUsuario.Telefone;
+            existeUsuario.Cpf = usuario.Cpf != null ? usuario.Cpf : existeUsuario.Cpf;
+            existeUsuario.Email = usuario.Email != null ? usuario.Email : existeUsuario.Email;
+            existeUsuario.Senha = usuario.Senha != null ? usuario.Senha : existeUsuario.Senha;
 
             context.Usuarios.Update(existeUsuario);
             await context.SaveChangesAsync();
@@ -107,12 +105,32 @@ namespace APP_API.Controllers
             return NoContent();
         }
 
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarUsuario
+        (
+            [FromServices] AppDbContext context,
+            [FromRoute] int id
+        )
+        {
+            var usuario = await context.Usuarios.FindAsync(id);
+            if (usuario is null)
+            {
+                return NotFound();
+            }
+
+            context.Usuarios.Remove(usuario);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
+
         [HttpPost]
         [Route("login")]
         public async Task<ActionResult<dynamic>> AutenticarUsuario
        ([FromServices] AppDbContext context,
        [FromServices] ITokenService tokenService,
-       [FromBody] LogarUsuarioDto usuarioDto) // Nesse método, só precisamos passar o email e a senha
+       [FromBody] LogarUsuarioDto usuarioDto) // Nesse mï¿½todo, sï¿½ precisamos passar o email e a senha
         {
             var user = await context
                 .Usuarios
@@ -120,7 +138,7 @@ namespace APP_API.Controllers
                 .FirstOrDefaultAsync(x => x.Email.ToLower() == usuarioDto.Email.ToLower() && x.Senha.ToLower() == usuarioDto.Senha.ToLower());
 
             if (user is null)
-                return NotFound(new { message = "Email ou senha inválidos" });
+                return NotFound(new { message = "Email ou senha invï¿½lidos" });
 
             var token = tokenService.GerarToken(user);
 

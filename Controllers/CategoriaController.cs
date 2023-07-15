@@ -1,13 +1,10 @@
 ﻿using APP_API.Data;
 using APP_API.Data.Dtos.CategoriaDto;
-using APP_API.Data.Dtos.UsuarioDto;
 using APP_API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Formats.Asn1;
-using System.Reflection.Metadata.Ecma335;
 
 namespace APP_API.Controllers
 {
@@ -17,6 +14,7 @@ namespace APP_API.Controllers
     {
         [HttpPost]
         [Route("criar")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> CriarCategoria
         (
                 [FromServices] AppDbContext context,
@@ -62,36 +60,56 @@ namespace APP_API.Controllers
             return NoContent();
         }
 
-
         [HttpGet]
+        [Route("buscar")]
         public async Task<IActionResult> BuscarCategorias([FromServices] AppDbContext context, [FromServices] IMapper mapper)
         {
             List<Categoria> categorias = await context.Categorias.ToListAsync();
-            List<ReadLinhaDto> categoriaDto = mapper.Map<List<ReadLinhaDto>>(categorias);
-            
+            List<ReadCategoriaDto> categoriaDto = mapper.Map<List<ReadCategoriaDto>>(categorias);
+
             return Ok(categoriaDto);
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarCategoriaPorId
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] int id
+            [FromQuery] int id
         )
         {
             var categoria = await context.Categorias.FirstOrDefaultAsync(c => c.Id == id);
 
-            if (categoria is null) 
+            if (categoria is null)
+            {
                 BadRequest();
+            }
 
-            ReadLinhaDto categoriaDto = mapper.Map<ReadLinhaDto>(categoria);
+            ReadCategoriaDto categoriaDto = mapper.Map<ReadCategoriaDto>(categoria);
 
             return Ok(categoriaDto);
         }
 
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarCategoria
+                (
+                    [FromServices] AppDbContext context,
+                    [FromRoute] int id
+                )
+        {
+            var categoria = await context.Categorias.FindAsync(id);
+            if (categoria is null)
+            {
+                return NotFound();
+            }
 
+            context.Categorias.Remove(categoria);
+            await context.SaveChangesAsync();
+
+            return Ok();
+        }
 
     }
 }

@@ -10,7 +10,10 @@ namespace APP_API.Profiles
         {
             CreateMap<CreateUsuarioDto, Usuario>();
             CreateMap<PutUsuarioDto, Usuario>();
-            CreateMap<Usuario, ReadUsuarioDto>();
+            CreateMap<Usuario, ReadUsuarioDto>()
+                .ForMember(u => u.Enderecos, opts => opts
+                .MapFrom(u => u.Enderecos
+                .Select(e => new { e.Cep, e.Bairro, e.Rua })));
         }
     }
 }

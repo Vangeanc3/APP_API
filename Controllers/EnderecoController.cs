@@ -1,9 +1,7 @@
 ﻿using APP_API.Data;
-using APP_API.Data.Dtos.CategoriaDto;
 using APP_API.Data.Dtos.EnderecoDto;
 using APP_API.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +20,7 @@ namespace APP_API.Controllers
             [FromBody] CreateEnderecoDto enderecoDto
             )
         {
-            
+
             if (enderecoDto is null)
                 return BadRequest();
 
@@ -41,7 +39,7 @@ namespace APP_API.Controllers
               [FromServices] AppDbContext context,
               [FromServices] IMapper mapper,
               [FromRoute] int id,
-              [FromBody] PutEnderecoDto enderecoDto    
+              [FromBody] PutEnderecoDto enderecoDto
           )
         {
             Endereco endereco = mapper.Map<Endereco>(enderecoDto);
@@ -53,12 +51,12 @@ namespace APP_API.Controllers
                 return NotFound("Endereço não existe");
             }
 
-            existeEndereco.Cep =                 endereco.Cep != null ? endereco.Cep          : existeEndereco.Cep;
-            existeEndereco.Bloco =             endereco.Bloco != null ? endereco.Bloco        : existeEndereco.Bloco;
-            existeEndereco.Numero =           endereco.Numero != null ? endereco.Numero       : existeEndereco.Numero;
-            existeEndereco.Bairro =           endereco.Bairro != null ? endereco.Bairro       : existeEndereco.Bairro;
-            existeEndereco.Apartamento = endereco.Apartamento != null ? endereco.Apartamento  : existeEndereco.Apartamento;
-            existeEndereco.Rua =                 endereco.Rua != null ? endereco.Rua          : existeEndereco.Rua;
+            existeEndereco.Cep = endereco.Cep != null ? endereco.Cep : existeEndereco.Cep;
+            existeEndereco.Bloco = endereco.Bloco != null ? endereco.Bloco : existeEndereco.Bloco;
+            existeEndereco.Numero = endereco.Numero != null ? endereco.Numero : existeEndereco.Numero;
+            existeEndereco.Bairro = endereco.Bairro != null ? endereco.Bairro : existeEndereco.Bairro;
+            existeEndereco.Apartamento = endereco.Apartamento != null ? endereco.Apartamento : existeEndereco.Apartamento;
+            existeEndereco.Rua = endereco.Rua != null ? endereco.Rua : existeEndereco.Rua;
 
             context.Enderecos.Update(existeEndereco);
             await context.SaveChangesAsync();
@@ -67,7 +65,12 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BuscarEndereco([FromServices] AppDbContext context, [FromServices] IMapper mapper)
+        [Route("buscar")]
+        public async Task<IActionResult> BuscarEndereco
+        (
+            [FromServices] AppDbContext context,
+            [FromServices] IMapper mapper
+        )
         {
             List<Endereco> enderecos = await context.Enderecos.ToListAsync();
             List<ReadEnderecoDto> enderecoDtos = mapper.Map<List<ReadEnderecoDto>>(enderecos);
@@ -76,22 +79,42 @@ namespace APP_API.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("buscar/parametro")]
         public async Task<IActionResult> BuscarEnderecoPorId
         (
             [FromServices] AppDbContext context,
             [FromServices] IMapper mapper,
-            [FromRoute] int id
+            [FromQuery] int id
         )
         {
             var endereco = await context.Enderecos.FirstOrDefaultAsync(e => e.Id == id);
 
             if (endereco is null)
-                    BadRequest();
+                BadRequest();
 
             ReadEnderecoDto readEnderecoDto = mapper.Map<ReadEnderecoDto>(endereco);
 
             return Ok(readEnderecoDto);
+        }
+
+        [HttpDelete]
+        [Route("deletar/{id}")]
+        public async Task<IActionResult> DeletarEndereco
+        (
+            [FromServices] AppDbContext context,
+            [FromRoute] int id
+        )
+        {
+            var endereco = await context.Enderecos.FindAsync(id);
+            if (endereco is null)
+            {
+                return NotFound();
+            }
+
+            context.Enderecos.Remove(endereco);
+            await context.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
